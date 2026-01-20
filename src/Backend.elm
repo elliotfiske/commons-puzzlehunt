@@ -116,7 +116,7 @@ puzzleAnswers puzzleId =
             ( "GULLIBLE", "3" )
 
         Puzzle3 ->
-            ( "MOONSHINE", "5" )
+            ( "RAISE YOUR SPIRITS", "5" )
 
         Puzzle4 ->
             ( "SECRET", "7" )
