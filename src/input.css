@@ -108,6 +108,14 @@
     line-height: 1.9;
   }
 
+  /* Intro image - vintage photo style */
+  .intro-image {
+    @apply w-full max-w-xs mx-auto mb-6 block;
+    border: 3px solid var(--color-gold-dark);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    filter: sepia(20%);
+  }
+
   .story-block {
     @apply py-6 px-4 my-6 mx-auto text-center;
     background: linear-gradient(135deg, #1a1a1a 0%, #151515 100%);
