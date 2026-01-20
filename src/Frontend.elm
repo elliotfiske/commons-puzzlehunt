@@ -1,16 +1,20 @@
 module Frontend exposing (FrontendApp, Model, UnwrappedFrontendApp, app, app_)
 
-import Browser
+import Browser exposing (UrlRequest(..))
 import Browser.Navigation
 import Effect.Browser exposing (UrlRequest)
 import Effect.Browser.Navigation
 import Effect.Command as Command exposing (Command, FrontendOnly)
 import Effect.Lamdera
 import Effect.Subscription as Subscription exposing (Subscription)
-import Html
-import Html.Attributes as Attr
+import Html exposing (Html, div, h1, p, text)
 import Lamdera as L
-import Types exposing (FrontendModel, FrontendMsg(..), ToBackend, ToFrontend(..))
+import Pages.Hub
+import Pages.Intro
+import Pages.Puzzle
+import Pages.Stash
+import Route
+import Types exposing (AnswerResult(..), FrontendModel, FrontendMsg(..), PuzzleId(..), Route(..), StashId, ToBackend(..), ToFrontend(..), UserProgress)
 import Url
 
 
@@ -31,9 +35,12 @@ app_ =
 
 
 init : Url.Url -> Effect.Browser.Navigation.Key -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
-init _ key =
+init url key =
     ( { key = key
-      , message = "Hello world!"
+      , route = Route.fromUrl url
+      , userProgress = Nothing
+      , puzzleInput = ""
+      , lastAnswerResult = NoAnswerYet
       }
     , Command.none
     )
@@ -42,57 +49,249 @@ init _ key =
 update : FrontendMsg -> Model -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
 update msg model =
     case msg of
-        UrlClicked _ ->
-            -- Currently unneeded (everything is on one page)
-            ( model, Command.none )
+        UrlClicked urlRequest ->
+            case urlRequest of
+                Internal url ->
+                    ( model
+                    , Effect.Browser.Navigation.pushUrl model.key (Url.toString url)
+                    )
 
-        UrlChanged _ ->
-            -- Currently unneeded (everything is on one page)
-            ( model, Command.none )
+                External url ->
+                    ( model
+                    , Effect.Browser.Navigation.load url
+                    )
+
+        UrlChanged url ->
+            let
+                newRoute =
+                    Route.fromUrl url
+
+                -- Clear input and answer result when changing to a puzzle page
+                ( newInput, newResult ) =
+                    case newRoute of
+                        PaintingsRoute ->
+                            ( "", NoAnswerYet )
+
+                        LedgerRoute ->
+                            ( "", NoAnswerYet )
+
+                        StashRoute ->
+                            ( "", NoAnswerYet )
+
+                        TileRoute ->
+                            ( "", NoAnswerYet )
+
+                        _ ->
+                            ( model.puzzleInput, model.lastAnswerResult )
+
+                -- If landing on a StashFoundRoute, mark the stash as found
+                cmd =
+                    case newRoute of
+                        StashFoundRoute stashId ->
+                            case model.userProgress of
+                                Just progress ->
+                                    if progress.hasSeenIntro then
+                                        Effect.Lamdera.sendToBackend (MarkStashFound stashId)
+
+                                    else
+                                        Command.none
+
+                                Nothing ->
+                                    Command.none
+
+                        _ ->
+                            Command.none
+            in
+            ( { model | route = newRoute, puzzleInput = newInput, lastAnswerResult = newResult }
+            , cmd
+            )
 
         NoOpFrontendMsg ->
             ( model, Command.none )
+
+        PuzzleInputChanged value ->
+            ( { model | puzzleInput = value }, Command.none )
+
+        SubmitAnswer puzzleId ->
+            ( model
+            , Effect.Lamdera.sendToBackend (SubmitPuzzleAnswer puzzleId model.puzzleInput)
+            )
+
+        ClickedBegin ->
+            ( model
+            , Command.batch
+                [ Effect.Lamdera.sendToBackend MarkIntroSeen
+                , Effect.Browser.Navigation.pushUrl model.key "/hub"
+                ]
+            )
+
+        NavigateTo path ->
+            ( model
+            , Effect.Browser.Navigation.pushUrl model.key path
+            )
 
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
 updateFromBackend msg model =
     case msg of
-        NoOpToFrontend ->
-            ( model, Command.none )
+        InitialState progress ->
+            ( { model | userProgress = Just progress }, Command.none )
+
+        PuzzleAnswerResult puzzleId maybeNumber ->
+            let
+                newResult =
+                    case maybeNumber of
+                        Just number ->
+                            Correct puzzleId number
+
+                        Nothing ->
+                            Incorrect puzzleId
+
+                newProgress =
+                    case maybeNumber of
+                        Just _ ->
+                            Maybe.map (markPuzzleComplete puzzleId) model.userProgress
+
+                        Nothing ->
+                            model.userProgress
+            in
+            ( { model | lastAnswerResult = newResult, userProgress = newProgress }, Command.none )
+
+        StashMarked stashId ->
+            let
+                newProgress =
+                    Maybe.map (markStashFound stashId) model.userProgress
+            in
+            ( { model | userProgress = newProgress }, Command.none )
+
+
+markPuzzleComplete : PuzzleId -> UserProgress -> UserProgress
+markPuzzleComplete puzzleId progress =
+    case puzzleId of
+        Puzzle1 ->
+            { progress | puzzle1Complete = True }
+
+        Puzzle2 ->
+            { progress | puzzle2Complete = True }
+
+        Puzzle3 ->
+            { progress | puzzle3Complete = True }
+
+        Puzzle4 ->
+            { progress | puzzle4Complete = True }
+
+
+markStashFound : StashId -> UserProgress -> UserProgress
+markStashFound stashId progress =
+    let
+        stashes =
+            progress.puzzle3Stashes
+
+        newStashes =
+            case stashId of
+                Types.Moonshine ->
+                    { stashes | moonshine = True }
+
+                Types.Whiskey ->
+                    { stashes | whiskey = True }
+
+                Types.Gin ->
+                    { stashes | gin = True }
+
+                Types.Bourbon ->
+                    { stashes | bourbon = True }
+
+                Types.Rum ->
+                    { stashes | rum = True }
+    in
+    { progress | puzzle3Stashes = newStashes }
 
 
 view : Model -> Effect.Browser.Document FrontendMsg
 view model =
-    { title = "Habit Dashboard"
-    , body =
-        [ Html.node "link" [ Attr.rel "stylesheet", Attr.href "/output.css" ] []
-        , Html.div [ Attr.class "min-h-screen bg-base-200 flex flex-col items-center justify-center p-8" ]
-            [ Html.div [ Attr.class "card bg-base-100 shadow-xl p-8" ]
-                [ Html.img
-                    [ Attr.src "https://lamdera.app/lamdera-logo-black.png"
-                    , Attr.width 150
-                    , Attr.class "mx-auto"
-                    ]
-                    []
-                , Html.h1 [ Attr.class "text-3xl font-bold text-center mt-6" ]
-                    [ Html.text "Habit Dashboard" ]
-                , Html.p [ Attr.class "text-center text-base-content/70 mt-2" ]
-                    [ Html.text model.message ]
-                , Html.div [ Attr.class "flex gap-2 justify-center mt-6" ]
-                    [ Html.button [ Attr.class "btn btn-primary" ] [ Html.text "Get Started" ]
-                    , Html.button [ Attr.class "btn btn-ghost" ] [ Html.text "Learn More" ]
-                    ]
-                ]
-            ]
-        ]
+    { title = "The Secret of the Commons"
+    , body = [ viewBody model ]
     }
 
 
-{-| Type alias for the frontend application configuration record (Effect-wrapped version).
--}
+viewBody : Model -> Html FrontendMsg
+viewBody model =
+    case model.userProgress of
+        Nothing ->
+            div [] [ text "Loading..." ]
+
+        Just progress ->
+            viewWithProgress model progress
+
+
+viewWithProgress : Model -> UserProgress -> Html FrontendMsg
+viewWithProgress model progress =
+    case model.route of
+        IntroRoute ->
+            if progress.hasSeenIntro then
+                -- Redirect to hub (handled by showing hub content)
+                Pages.Hub.view progress
+
+            else
+                Pages.Intro.view
+
+        HubRoute ->
+            if progress.hasSeenIntro then
+                Pages.Hub.view progress
+
+            else
+                Pages.Intro.view
+
+        PaintingsRoute ->
+            Pages.Puzzle.view
+                { title = "The Paintings"
+                , description = "Several paintings hang around the Commons. Find them all and spell out the clue to discover the password."
+                , puzzleId = Puzzle1
+                }
+                model.puzzleInput
+                model.lastAnswerResult
+                progress.puzzle1Complete
+
+        LedgerRoute ->
+            Pages.Puzzle.view
+                { title = "Bootlegger's Ledger"
+                , description = "The bootlegger kept meticulous records. Use the book cipher (page, line, word) with books from the Commons library to decode the message."
+                , puzzleId = Puzzle2
+                }
+                model.puzzleInput
+                model.lastAnswerResult
+                progress.puzzle2Complete
+
+        StashRoute ->
+            Pages.Stash.viewPuzzle
+                progress.puzzle3Stashes
+                model.puzzleInput
+                model.lastAnswerResult
+                progress.puzzle3Complete
+
+        StashFoundRoute stashId ->
+            Pages.Stash.viewFound stashId progress.hasSeenIntro
+
+        TileRoute ->
+            Pages.Puzzle.view
+                { title = "The Hidden Tile"
+                , description = "Somewhere in the Commons, a secret awaits discovery. Find the hidden tile to reveal the final password."
+                , puzzleId = Puzzle4
+                }
+                model.puzzleInput
+                model.lastAnswerResult
+                progress.puzzle4Complete
+
+        NotFoundRoute ->
+            div []
+                [ h1 [] [ text "Page Not Found" ]
+                , p [] [ text "This page doesn't exist." ]
+                ]
+
+
 type alias FrontendApp =
     { init : Url.Url -> Effect.Browser.Navigation.Key -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
-    , onUrlRequest : UrlRequest -> FrontendMsg
+    , onUrlRequest : Effect.Browser.UrlRequest -> FrontendMsg
     , onUrlChange : Url.Url -> FrontendMsg
     , update : FrontendMsg -> Model -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
     , updateFromBackend : ToFrontend -> Model -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
@@ -101,8 +300,6 @@ type alias FrontendApp =
     }
 
 
-{-| Type alias for the unwrapped frontend application (uses standard Cmd/Sub).
--}
 type alias UnwrappedFrontendApp =
     { init : Url.Url -> Browser.Navigation.Key -> ( Model, Cmd FrontendMsg )
     , view : Model -> Browser.Document FrontendMsg
