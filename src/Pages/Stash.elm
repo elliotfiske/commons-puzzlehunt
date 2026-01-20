@@ -15,7 +15,7 @@ viewPuzzle stashes =
         [ div [ class "page-content" ]
             [ h1 [ class "heading-deco" ] [ text "Smuggler's Stash" ]
             , div [ class "divider-deco" ] []
-            , p [ class "body-text" ] [ text "Find all the hidden stashes around the Commons!" ]
+            , p [ class "body-text" ] [ text "It is a little-known fact that photons are terrible at keeping secrets, but excellent at distracting the police. The local bootleggers realized that if you put a secret in the darkest corner of a room, a detective with a flashlight will find it in seconds. However, if you hide it inside the light source itself, the detective will simply squint, say ‘Gosh, that’s bright,’ and walk into a coat rack. Find the 5 stashes that are hiding in the furniture that's screaming at the darkness." ]
             , h2 [ class "heading-secondary mt-8" ] [ text "Stashes Found:" ]
             , ul [ class "stash-list" ]
                 [ stashItem "Moonshine" stashes.moonshine
@@ -92,9 +92,9 @@ viewFound stashId hasSeenIntro =
     div [ class "page-wrapper" ]
         [ div [ class "page-content" ]
             [ div [ class "celebration" ]
-                [ div [ class "celebration-icon" ] [ text "\u{2726}" ]
+                [ div [ class "celebration-icon" ] [ text "✦" ]
                 , h1 [ class "celebration-title" ] [ text "You found a stash!" ]
-                , div [ class "celebration-icon" ] [ text "\u{2726}" ]
+                , div [ class "celebration-icon" ] [ text "✦" ]
                 , p [ class "body-text mt-6" ] [ text ("You discovered the " ++ stashName ++ " stash!") ]
                 , if hasSeenIntro then
                     div [ class "mt-8" ]
