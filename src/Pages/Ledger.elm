@@ -18,8 +18,8 @@ type alias LedgerEntry =
 ledgerEntries : List LedgerEntry
 ledgerEntries =
     [ { book = "Sapiens", page = 12, line = 22, word = 8, answer = Nothing }
-    , { book = "Being and Time", page = 197, line = 6, word = 2, answer = Just "THE" }
-    , { book = "Sophie's World", page = 10, line = 8, word = 3, answer = Just "BOOKS" }
+    , { book = "Being and Time", page = 197, line = 6, word = 2, answer = Nothing }
+    , { book = "Sophie's World", page = 10, line = 8, word = 3, answer = Nothing }
     ]
 
 

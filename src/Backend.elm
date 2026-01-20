@@ -113,7 +113,7 @@ puzzleAnswers puzzleId =
             ( "RAISE YOUR SPIRITS", "7" )
 
         Puzzle2 ->
-            ( "COOK", "3" )
+            ( "COOK THE BOOKS", "3" )
 
         Puzzle3 ->
             ( "no password for this one", "5" )
