@@ -1,4 +1,3 @@
-
 module SmokeTests exposing (appTests, main)
 
 import Backend
@@ -9,7 +8,7 @@ import Effect.Time
 import Frontend
 import Test exposing (describe)
 import Test.Html.Query
-import Test.Html.Selector exposing (exactText, tag, text)
+import Test.Html.Selector exposing (exactText, text)
 import Types exposing (BackendModel, BackendMsg, FrontendModel, FrontendMsg, ToBackend, ToFrontend)
 import Url exposing (Url)
 

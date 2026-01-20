@@ -1,11 +1,10 @@
 module Backend exposing (BackendApp, Model, UnwrappedBackendApp, app, app_)
 
-import Dict exposing (Dict)
 import Effect.Command as Command exposing (BackendOnly, Command)
 import Effect.Lamdera exposing (ClientId, SessionId)
 import Effect.Subscription as Subscription exposing (Subscription)
 import Lamdera as L
-import SeqDict exposing (SeqDict)
+import SeqDict
 import Types exposing (BackendModel, BackendMsg(..), PuzzleId(..), StashId(..), ToBackend(..), ToFrontend(..), UserProgress)
 
 
@@ -149,29 +148,30 @@ updateFromFrontend sessionId clientId msg model =
                 isCorrect =
                     String.toUpper (String.trim answer) == correctPassword
 
-                progress =
-                    getProgress sessionId model
-
-                newProgress =
-                    if isCorrect then
-                        case puzzleId of
-                            Puzzle1 ->
-                                { progress | puzzle1Complete = True }
-
-                            Puzzle2 ->
-                                { progress | puzzle2Complete = True }
-
-                            Puzzle3 ->
-                                { progress | puzzle3Complete = True }
-
-                            Puzzle4 ->
-                                { progress | puzzle4Complete = True }
-
-                    else
-                        progress
-
                 newModel =
                     if isCorrect then
+                        let
+                            progress =
+                                getProgress sessionId model
+
+                            newProgress =
+                                if isCorrect then
+                                    case puzzleId of
+                                        Puzzle1 ->
+                                            { progress | puzzle1Complete = True }
+
+                                        Puzzle2 ->
+                                            { progress | puzzle2Complete = True }
+
+                                        Puzzle3 ->
+                                            { progress | puzzle3Complete = True }
+
+                                        Puzzle4 ->
+                                            { progress | puzzle4Complete = True }
+
+                                else
+                                    progress
+                        in
                         { model | userProgress = SeqDict.insert sessionId newProgress model.userProgress }
 
                     else

@@ -1,9 +1,9 @@
-module Pages.Puzzle exposing (view)
+module Pages.Puzzle exposing (PuzzleConfig, view)
 
 import Html exposing (Html, a, button, div, form, h1, input, p, text)
 import Html.Attributes exposing (href, id, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
-import Types exposing (AnswerResult(..), FrontendMsg(..), PuzzleId(..))
+import Types exposing (AnswerResult(..), FrontendMsg(..), PuzzleId)
 
 
 type alias PuzzleConfig =

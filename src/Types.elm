@@ -13,7 +13,6 @@ module Types exposing
     , UserProgress
     )
 
-import Dict exposing (Dict)
 import Effect.Browser
 import Effect.Browser.Navigation
 import Effect.Lamdera

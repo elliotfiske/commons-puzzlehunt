@@ -2,7 +2,7 @@ module Frontend exposing (FrontendApp, Model, UnwrappedFrontendApp, app, app_)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation
-import Effect.Browser exposing (UrlRequest)
+import Effect.Browser
 import Effect.Browser.Navigation
 import Effect.Command as Command exposing (Command, FrontendOnly)
 import Effect.Lamdera

@@ -1,4 +1,4 @@
-module Route exposing (fromUrl, toPath)
+module Route exposing (fromUrl)
 
 import Types exposing (Route(..), StashId(..))
 import Url exposing (Url)
@@ -44,50 +44,3 @@ parseStashFound stashName =
 
         _ ->
             NotFoundRoute
-
-
-toPath : Route -> String
-toPath route =
-    case route of
-        IntroRoute ->
-            "/"
-
-        HubRoute ->
-            "/hub"
-
-        PaintingsRoute ->
-            "/paintings"
-
-        LedgerRoute ->
-            "/ledger"
-
-        StashRoute ->
-            "/stash"
-
-        StashFoundRoute stashId ->
-            "/stash/" ++ stashIdToString stashId
-
-        TileRoute ->
-            "/tile"
-
-        NotFoundRoute ->
-            "/not-found"
-
-
-stashIdToString : StashId -> String
-stashIdToString stashId =
-    case stashId of
-        Moonshine ->
-            "moonshine"
-
-        Whiskey ->
-            "whiskey"
-
-        Gin ->
-            "gin"
-
-        Bourbon ->
-            "bourbon"
-
-        Rum ->
-            "rum"
