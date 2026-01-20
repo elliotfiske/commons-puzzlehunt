@@ -353,4 +353,86 @@
     font-size: 1.25rem;
     letter-spacing: 0.1em;
   }
+
+  /* Bootlegger's Ledger puzzle */
+  .ledger-container {
+    @apply my-8 overflow-x-auto;
+    background: linear-gradient(135deg, #1a1612 0%, #0f0d0a 100%);
+    border: 2px solid var(--color-gold-dark);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    @apply w-full;
+    border-collapse: collapse;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .ledger-header {
+    @apply text-[#d4a855] py-3 px-2 text-left;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--color-gold-dark);
+  }
+
+  .ledger-row {
+    border-bottom: 1px solid rgba(212, 168, 85, 0.2);
+  }
+
+  .ledger-row:last-child {
+    border-bottom: none;
+  }
+
+  .ledger-cell {
+    @apply py-3 px-2;
+    color: var(--color-text);
+  }
+
+  .ledger-book {
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', serif;
+    min-width: 100px;
+  }
+
+  .ledger-num {
+    @apply text-center;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--color-text-muted);
+    min-width: 45px;
+  }
+
+  .ledger-answer {
+    @apply text-right;
+    font-weight: 600;
+    min-width: 70px;
+  }
+
+  .ledger-revealed {
+    color: var(--color-gold);
+    letter-spacing: 0.1em;
+  }
+
+  .ledger-hidden {
+    color: var(--color-burgundy);
+    font-style: italic;
+  }
+
+  @media (min-width: 640px) {
+    .ledger-container {
+      padding: 1.5rem;
+    }
+
+    .ledger-header {
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .ledger-cell {
+      padding: 0.75rem 1rem;
+    }
+  }
 }

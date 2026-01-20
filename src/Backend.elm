@@ -113,13 +113,13 @@ puzzleAnswers puzzleId =
             ( "RAISE YOUR SPIRITS", "7" )
 
         Puzzle2 ->
-            ( "COOK THE BOOKS", "3" )
+            ( "COOK", "3" )
 
         Puzzle3 ->
-            ( "RAISE YOUR SPIRITS", "5" )
+            ( "no password for this one", "5" )
 
         Puzzle4 ->
-            ( "SECRET", "7" )
+            ( "LAST CALL", "7" )
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Command BackendOnly ToFrontend BackendMsg )
@@ -213,8 +213,11 @@ updateFromFrontend sessionId clientId msg model =
                         Rum ->
                             { stashes | rum = True }
 
+                allFound =
+                    newStashes.moonshine && newStashes.whiskey && newStashes.gin && newStashes.bourbon && newStashes.rum
+
                 newProgress =
-                    { progress | puzzle3Stashes = newStashes }
+                    { progress | puzzle3Stashes = newStashes, puzzle3Complete = allFound }
 
                 newModel =
                     { model | userProgress = SeqDict.insert sessionId newProgress model.userProgress }

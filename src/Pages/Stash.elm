@@ -1,13 +1,16 @@
 module Pages.Stash exposing (viewFound, viewPuzzle)
 
-import Html exposing (Html, a, button, div, form, h1, h2, input, li, p, span, text, ul)
-import Html.Attributes exposing (class, href, id, placeholder, type_, value)
-import Html.Events exposing (onClick, onInput, onSubmit)
-import Types exposing (AnswerResult(..), FrontendMsg(..), PuzzleId(..), StashId(..), StashProgress)
+import Html exposing (Html, a, div, h1, h2, li, p, span, text, ul)
+import Html.Attributes exposing (class, href)
+import Types exposing (FrontendMsg(..), StashId(..), StashProgress)
 
 
-viewPuzzle : StashProgress -> String -> AnswerResult -> Bool -> Html FrontendMsg
-viewPuzzle stashes inputValue answerResult isComplete =
+viewPuzzle : StashProgress -> Html FrontendMsg
+viewPuzzle stashes =
+    let
+        allFound =
+            stashes.moonshine && stashes.whiskey && stashes.gin && stashes.bourbon && stashes.rum
+    in
     div [ class "page-wrapper" ]
         [ div [ class "page-content" ]
             [ h1 [ class "heading-deco" ] [ text "Smuggler's Stash" ]
@@ -21,38 +24,14 @@ viewPuzzle stashes inputValue answerResult isComplete =
                 , stashItem "Bourbon" stashes.bourbon
                 , stashItem "Rum" stashes.rum
                 ]
-            , if isComplete then
-                case answerResult of
-                    Correct _ number ->
-                        div [ class "text-center mt-8" ]
-                            [ p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]
-                            , a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ]
-                            ]
-
-                    _ ->
-                        div [ class "text-center mt-8" ]
-                            [ p [ class "feedback-success" ] [ text "Already solved!" ]
-                            , a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ]
-                            ]
+            , if allFound then
+                div [ class "text-center mt-8" ]
+                    [ p [ class "feedback-success" ] [ text "All stashes found! The number is: 5" ]
+                    , a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ]
+                    ]
 
               else
-                div [ class "mt-8" ]
-                    [ p [ class "body-text-muted" ] [ text "Enter the final password:" ]
-                    , form [ id "stash-form", class "puzzle-form", onSubmit (SubmitAnswer Puzzle3) ]
-                        [ input
-                            [ id "stash-password-input"
-                            , class "input-paper"
-                            , type_ "text"
-                            , placeholder "Enter password"
-                            , value inputValue
-                            , onInput PuzzleInputChanged
-                            ]
-                            []
-                        , button [ id "stash-submit-btn", class "btn-brass w-full", type_ "submit", onClick (SubmitAnswer Puzzle3) ] [ text "Submit" ]
-                        ]
-                    , viewAnswerFeedback answerResult
-                    , p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ] ]
-                    ]
+                p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ] ]
             ]
         ]
 
@@ -88,25 +67,6 @@ stashItem name found =
                 )
             ]
         ]
-
-
-viewAnswerFeedback : AnswerResult -> Html FrontendMsg
-viewAnswerFeedback result =
-    case result of
-        NoAnswerYet ->
-            text ""
-
-        Incorrect Puzzle3 ->
-            p [ class "feedback-error" ] [ text "Incorrect. Try again!" ]
-
-        Incorrect _ ->
-            text ""
-
-        Correct Puzzle3 number ->
-            p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]
-
-        Correct _ _ ->
-            text ""
 
 
 viewFound : StashId -> Bool -> Html FrontendMsg

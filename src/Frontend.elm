@@ -12,6 +12,7 @@ import Html.Attributes exposing (class, href, rel)
 import Lamdera as L
 import Pages.Hub
 import Pages.Intro
+import Pages.Ledger
 import Pages.Paintings
 import Pages.Puzzle
 import Pages.Stash
@@ -219,8 +220,11 @@ markStashFound stashId progress =
 
                 Types.Rum ->
                     { stashes | rum = True }
+
+        allFound =
+            newStashes.moonshine && newStashes.whiskey && newStashes.gin && newStashes.bourbon && newStashes.rum
     in
-    { progress | puzzle3Stashes = newStashes }
+    { progress | puzzle3Stashes = newStashes, puzzle3Complete = allFound }
 
 
 view : Model -> Effect.Browser.Document FrontendMsg
@@ -272,21 +276,13 @@ viewWithProgress model progress =
                 progress.puzzle1Complete
 
         LedgerRoute ->
-            Pages.Puzzle.view
-                { title = "Bootlegger's Ledger"
-                , description = "The bootlegger kept meticulous records. Use the book cipher (page, line, word) with books from the Commons library to decode the message."
-                , puzzleId = Puzzle2
-                }
+            Pages.Ledger.view
                 model.puzzleInput
                 model.lastAnswerResult
                 progress.puzzle2Complete
 
         StashRoute ->
-            Pages.Stash.viewPuzzle
-                progress.puzzle3Stashes
-                model.puzzleInput
-                model.lastAnswerResult
-                progress.puzzle3Complete
+            Pages.Stash.viewPuzzle progress.puzzle3Stashes
 
         StashFoundRoute stashId ->
             Pages.Stash.viewFound stashId progress.hasSeenIntro
