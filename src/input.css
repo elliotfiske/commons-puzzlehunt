@@ -2,3 +2,323 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom font for intro story */
+@font-face {
+  font-family: 'OldNewspaper';
+  src: url('/OldNewspaperTypes.ttf') format('truetype');
+}
+
+/* CSS Variables for speakeasy theme */
+:root {
+  --color-bg: #0a0a0a;
+  --color-surface: #1a1a1a;
+  --color-burgundy: #8b0000;
+  --color-gold: #d4a855;
+  --color-gold-light: #e6be6a;
+  --color-gold-dark: #a07830;
+  --color-text: #f5f0e6;
+  --color-text-muted: #a69f8f;
+  --color-input-text: #2a2420;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0a0a0a] text-[#f5f0e6] min-h-screen;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+}
+
+@layer components {
+  /* Page wrapper - theatrical spacing */
+  .page-wrapper {
+    @apply min-h-screen flex flex-col items-center px-6 py-16;
+    max-width: 100%;
+  }
+
+  .page-content {
+    @apply w-full;
+    max-width: 400px;
+  }
+
+  @media (min-width: 640px) {
+    .page-content {
+      max-width: 600px;
+    }
+  }
+
+  /* Art Deco Headings */
+  .heading-deco {
+    @apply text-[#d4a855] text-center mb-8;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 640px) {
+    .heading-deco {
+      font-size: 2.25rem;
+    }
+  }
+
+  .heading-secondary {
+    @apply text-[#f5f0e6] mb-4;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Decorative divider with diamond */
+  .divider-deco {
+    @apply relative my-8 mx-auto;
+    height: 1px;
+    background: var(--color-gold);
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .divider-deco::after {
+    content: '\25C6';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-bg);
+    padding: 0 0.75rem;
+    color: var(--color-gold);
+    font-size: 0.625rem;
+  }
+
+  /* Simple divider without diamond */
+  .divider-simple {
+    @apply my-6 mx-auto;
+    height: 1px;
+    background: var(--color-gold);
+    width: 60%;
+    max-width: 200px;
+  }
+
+  /* Old Newspaper story text */
+  .story-text {
+    font-family: 'OldNewspaper', 'Times New Roman', Georgia, serif;
+    @apply text-[#f5f0e6] leading-relaxed text-lg text-center;
+    line-height: 1.9;
+  }
+
+  .story-block {
+    @apply py-6 px-4 my-6 mx-auto text-center;
+    background: linear-gradient(135deg, #1a1a1a 0%, #151515 100%);
+    border: 1px solid var(--color-text-muted);
+    transform: rotate(-0.5deg);
+    max-width: 340px;
+  }
+
+  @media (min-width: 640px) {
+    .story-block {
+      max-width: 500px;
+      @apply px-8;
+    }
+  }
+
+  /* Body text */
+  .body-text {
+    @apply text-[#f5f0e6] text-center leading-relaxed mb-4;
+  }
+
+  .body-text-muted {
+    @apply text-[#a69f8f] text-center leading-relaxed mb-4;
+  }
+
+  /* Brass button */
+  .btn-brass {
+    @apply px-8 py-3 font-semibold transition-all duration-150;
+    background: linear-gradient(to bottom, #d4a855, #b8943d);
+    border: 2px solid var(--color-gold-dark);
+    color: var(--color-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: system-ui, -apple-system, sans-serif;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+    min-height: 48px;
+  }
+
+  .btn-brass:hover {
+    background: linear-gradient(to bottom, #e6be6a, #d4a855);
+    transform: scale(1.02);
+  }
+
+  .btn-brass:active {
+    background: linear-gradient(to bottom, #b8943d, #d4a855);
+    transform: scale(0.98);
+  }
+
+  /* Aged paper input */
+  .input-paper {
+    @apply w-full px-4 py-3 transition-all duration-150;
+    background: var(--color-text);
+    border: 2px solid var(--color-text-muted);
+    color: var(--color-input-text);
+    font-family: Georgia, 'Times New Roman', serif;
+    min-height: 48px;
+  }
+
+  .input-paper:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(212, 168, 85, 0.2);
+  }
+
+  .input-paper::placeholder {
+    color: #6b5d4d;
+  }
+
+  /* Gold link */
+  .link-gold {
+    @apply transition-all duration-150;
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-decoration-color: rgba(212, 168, 85, 0.4);
+  }
+
+  .link-gold:hover {
+    color: var(--color-gold-light);
+    text-decoration-color: var(--color-gold-light);
+  }
+
+  /* Puzzle card with corner accents */
+  .puzzle-card {
+    @apply relative p-6 mb-4 transition-all duration-150 block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-gold);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .puzzle-card:hover {
+    box-shadow: 0 0 20px rgba(212, 168, 85, 0.15);
+  }
+
+  a.puzzle-card:hover {
+    text-decoration: none;
+  }
+
+  /* Corner accents */
+  .puzzle-card::before,
+  .puzzle-card::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--color-gold);
+    border-style: solid;
+  }
+
+  .puzzle-card::before {
+    top: 8px;
+    left: 8px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .puzzle-card::after {
+    bottom: 8px;
+    right: 8px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .puzzle-card-title {
+    @apply mb-2;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    transition: color 150ms ease;
+  }
+
+  .puzzle-card:hover .puzzle-card-title {
+    color: var(--color-gold);
+  }
+
+  .puzzle-status-solved {
+    @apply text-[#d4a855] font-semibold;
+  }
+
+  .puzzle-status-locked {
+    @apply text-[#a69f8f];
+  }
+
+  /* Stash tracker ledger */
+  .stash-list {
+    @apply list-none p-0 m-0;
+  }
+
+  .stash-item {
+    @apply py-3 flex justify-between items-center;
+    border-bottom: 1px solid rgba(212, 168, 85, 0.3);
+  }
+
+  .stash-item:last-child {
+    border-bottom: none;
+  }
+
+  .stash-found {
+    @apply text-[#d4a855];
+  }
+
+  .stash-found::before {
+    content: '\2713 ';
+    margin-right: 0.5rem;
+  }
+
+  .stash-not-found {
+    @apply text-[#a69f8f];
+  }
+
+  .stash-not-found::after {
+    content: ' . . .';
+    letter-spacing: 0.2em;
+  }
+
+  /* Celebration page */
+  .celebration {
+    @apply text-center py-16;
+  }
+
+  .celebration-icon {
+    @apply text-[#d4a855] text-4xl mb-4;
+  }
+
+  .celebration-title {
+    @apply text-[#d4a855] text-2xl mb-2;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Feedback messages */
+  .feedback-success {
+    @apply text-[#d4a855] text-center py-4 font-semibold;
+  }
+
+  .feedback-error {
+    @apply text-[#8b0000] text-center py-4;
+  }
+
+  /* Form layout */
+  .puzzle-form {
+    @apply flex flex-col gap-4 my-6;
+  }
+
+  /* Loading state */
+  .loading-text {
+    @apply text-[#a69f8f] text-center;
+    font-family: system-ui, -apple-system, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+}

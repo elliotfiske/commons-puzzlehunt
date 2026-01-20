@@ -7,7 +7,8 @@ import Effect.Browser.Navigation
 import Effect.Command as Command exposing (Command, FrontendOnly)
 import Effect.Lamdera
 import Effect.Subscription as Subscription exposing (Subscription)
-import Html exposing (Html, div, h1, p, text)
+import Html exposing (Html, a, div, h1, node, p, text)
+import Html.Attributes exposing (class, href, rel)
 import Lamdera as L
 import Pages.Hub
 import Pages.Intro
@@ -210,7 +211,10 @@ markStashFound stashId progress =
 view : Model -> Effect.Browser.Document FrontendMsg
 view model =
     { title = "The Secret of the Commons"
-    , body = [ viewBody model ]
+    , body =
+        [ node "link" [ rel "stylesheet", href "/output.css" ] []
+        , viewBody model
+        ]
     }
 
 
@@ -218,7 +222,11 @@ viewBody : Model -> Html FrontendMsg
 viewBody model =
     case model.userProgress of
         Nothing ->
-            div [] [ text "Loading..." ]
+            div [ class "page-wrapper" ]
+                [ div [ class "page-content" ]
+                    [ p [ class "loading-text" ] [ text "Loading..." ]
+                    ]
+                ]
 
         Just progress ->
             viewWithProgress model progress
@@ -283,9 +291,13 @@ viewWithProgress model progress =
                 progress.puzzle4Complete
 
         NotFoundRoute ->
-            div []
-                [ h1 [] [ text "Page Not Found" ]
-                , p [] [ text "This page doesn't exist." ]
+            div [ class "page-wrapper" ]
+                [ div [ class "page-content" ]
+                    [ h1 [ class "heading-deco" ] [ text "Page Not Found" ]
+                    , div [ class "divider-deco" ] []
+                    , p [ class "body-text" ] [ text "This page doesn't exist." ]
+                    , p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/" ] [ text "Return Home" ] ]
+                    ]
                 ]
 
 
