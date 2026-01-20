@@ -16,8 +16,8 @@ view progress =
             , div [ class "mt-8" ]
                 [ puzzleCard "paintings-link" "The Paintings" "/paintings" progress.puzzle1Complete "7"
                 , puzzleCard "ledger-link" "Bootlegger's Ledger" "/ledger" progress.puzzle2Complete "3"
-                , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete "1"
-                , puzzleCard "tile-link" "The Hidden Tile" "/tile" progress.puzzle4Complete "9"
+                , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete "5"
+                , puzzleCard "tile-link" "The Hidden Tile" "/tile" progress.puzzle4Complete "7"
                 ]
             ]
         ]
