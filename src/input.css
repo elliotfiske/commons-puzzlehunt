@@ -106,6 +106,8 @@
     font-family: 'OldNewspaper', 'Times New Roman', Georgia, serif;
     @apply text-[#f5f0e6] leading-relaxed text-lg text-center;
     line-height: 1.9;
+    margin-top: 16px;
+    margin-bottom: 16px;
   }
 
   /* Intro image - vintage photo style */
@@ -328,5 +330,27 @@
     font-family: system-ui, -apple-system, sans-serif;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+  }
+
+  /* Paintings puzzle */
+  .paintings-grid {
+    @apply flex flex-col gap-6 my-8;
+  }
+
+  .painting-item {
+    @apply flex flex-col items-center;
+  }
+
+  .painting-image {
+    @apply w-full max-w-sm mx-auto block;
+    border: 3px solid var(--color-gold-dark);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .painting-label {
+    @apply mt-3 text-[#d4a855] font-semibold;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.1em;
   }
 }

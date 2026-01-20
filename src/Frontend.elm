@@ -12,6 +12,7 @@ import Html.Attributes exposing (class, href, rel)
 import Lamdera as L
 import Pages.Hub
 import Pages.Intro
+import Pages.Paintings
 import Pages.Puzzle
 import Pages.Stash
 import Route
@@ -251,11 +252,7 @@ viewWithProgress model progress =
                 Pages.Intro.view
 
         PaintingsRoute ->
-            Pages.Puzzle.view
-                { title = "The Paintings"
-                , description = "Several paintings hang around the Commons. Find them all and spell out the clue to discover the password."
-                , puzzleId = Puzzle1
-                }
+            Pages.Paintings.view
                 model.puzzleInput
                 model.lastAnswerResult
                 progress.puzzle1Complete
