@@ -150,7 +150,7 @@ testStashFoundPageForNewUser =
         [ Effect.Test.connectFrontend
             1000
             (Effect.Lamdera.sessionIdFromString "session6")
-            "/stash/moonshine"
+            "/stash/jonathans-moonshine"
             { width = 800, height = 600 }
             (\client ->
                 [ client.checkView 100 (Test.Html.Query.has [ exactText "You found a stash!" ])

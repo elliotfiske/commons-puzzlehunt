@@ -27,19 +27,19 @@ routeParser =
 parseStashFound : String -> Route
 parseStashFound stashName =
     case stashName of
-        "moonshine" ->
+        "jonathans-moonshine" ->
             StashFoundRoute Moonshine
 
-        "whiskey" ->
+        "jonnys-whiskey" ->
             StashFoundRoute Whiskey
 
-        "gin" ->
+        "josukes-gin" ->
             StashFoundRoute Gin
 
-        "bourbon" ->
+        "jolenes-bourbon" ->
             StashFoundRoute Bourbon
 
-        "rum" ->
+        "jotaros-rum" ->
             StashFoundRoute Rum
 
         _ ->
