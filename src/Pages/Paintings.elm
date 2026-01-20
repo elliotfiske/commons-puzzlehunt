@@ -10,7 +10,7 @@ view : String -> AnswerResult -> Bool -> Html FrontendMsg
 view inputValue answerResult isComplete =
     div [ class "page-wrapper" ]
         [ div [ class "page-content" ]
-            [ h1 [ class "heading-deco" ] [ text "The Paintings" ]
+            [ h1 [ class "heading-deco" ] [ text "The Proof is in the Pigment" ]
             , div [ class "divider-deco" ] []
             , p [ class "body-text" ] [ text "Several paintings hang around the Commons. Find them all and spell out the clue to discover the password." ]
             , div [ class "paintings-grid" ]

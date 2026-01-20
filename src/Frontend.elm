@@ -137,7 +137,21 @@ updateFromBackend : ToFrontend -> Model -> ( Model, Command FrontendOnly ToBacke
 updateFromBackend msg model =
     case msg of
         InitialState progress ->
-            ( { model | userProgress = Just progress }, Command.none )
+            let
+                -- If we landed on a StashFoundRoute, mark the stash as found now that we have progress
+                cmd =
+                    case model.route of
+                        StashFoundRoute stashId ->
+                            if progress.hasSeenIntro then
+                                Effect.Lamdera.sendToBackend (MarkStashFound stashId)
+
+                            else
+                                Command.none
+
+                        _ ->
+                            Command.none
+            in
+            ( { model | userProgress = Just progress }, cmd )
 
         PuzzleAnswerResult puzzleId maybeNumber ->
             let
