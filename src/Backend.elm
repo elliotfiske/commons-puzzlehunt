@@ -110,10 +110,10 @@ puzzleAnswers : PuzzleId -> ( String, String )
 puzzleAnswers puzzleId =
     case puzzleId of
         Puzzle1 ->
-            ( "SPEAKEASY", "7" )
+            ( "RAISE YOUR SPIRITS", "7" )
 
         Puzzle2 ->
-            ( "GULLIBLE", "3" )
+            ( "COOK THE BOOKS", "3" )
 
         Puzzle3 ->
             ( "RAISE YOUR SPIRITS", "5" )
