@@ -93,10 +93,12 @@ type FrontendMsg
     | SubmitAnswer PuzzleId
     | ClickedBegin
     | NavigateTo String
+    | Tick
 
 
 type ToBackend
-    = MarkIntroSeen
+    = RequestInitialState
+    | MarkIntroSeen
     | SubmitPuzzleAnswer PuzzleId String
     | MarkStashFound StashId
 

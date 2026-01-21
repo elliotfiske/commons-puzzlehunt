@@ -125,6 +125,15 @@ puzzleAnswers puzzleId =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Command BackendOnly ToFrontend BackendMsg )
 updateFromFrontend sessionId clientId msg model =
     case msg of
+        RequestInitialState ->
+            let
+                progress =
+                    getProgress sessionId model
+            in
+            ( model
+            , Effect.Lamdera.sendToFrontend clientId (InitialState progress)
+            )
+
         MarkIntroSeen ->
             let
                 progress =

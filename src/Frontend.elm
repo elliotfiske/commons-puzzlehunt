@@ -2,11 +2,13 @@ module Frontend exposing (FrontendApp, Model, UnwrappedFrontendApp, app, app_)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation
+import Duration exposing (Duration)
 import Effect.Browser
 import Effect.Browser.Navigation
 import Effect.Command as Command exposing (Command, FrontendOnly)
 import Effect.Lamdera
 import Effect.Subscription as Subscription exposing (Subscription)
+import Effect.Time
 import Html exposing (Html, a, div, h1, node, p, text)
 import Html.Attributes exposing (class, href, rel)
 import Lamdera as L
@@ -32,9 +34,20 @@ app_ =
     , onUrlChange = UrlChanged
     , update = update
     , updateFromBackend = updateFromBackend
-    , subscriptions = \_ -> Subscription.none
+    , subscriptions = subscriptions
     , view = view
     }
+
+
+subscriptions : Model -> Subscription FrontendOnly FrontendMsg
+subscriptions model =
+    case model.userProgress of
+        Nothing ->
+            -- Retry getting initial state every 500ms until we have it
+            Effect.Time.every (Duration.seconds 1) (\_ -> Tick)
+
+        Just _ ->
+            Subscription.none
 
 
 init : Url.Url -> Effect.Browser.Navigation.Key -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
@@ -45,13 +58,22 @@ init url key =
       , puzzleInput = ""
       , lastAnswerResult = NoAnswerYet
       }
-    , Command.none
+    , Effect.Lamdera.sendToBackend RequestInitialState
     )
 
 
 update : FrontendMsg -> Model -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
 update msg model =
     case msg of
+        Tick ->
+            -- Retry requesting initial state if we don't have it yet
+            case model.userProgress of
+                Nothing ->
+                    ( model, Effect.Lamdera.sendToBackend RequestInitialState )
+
+                Just _ ->
+                    ( model, Command.none )
+
         UrlClicked urlRequest ->
             case urlRequest of
                 Internal url ->
