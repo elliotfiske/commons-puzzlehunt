@@ -917,12 +917,6 @@ body {
   outline-offset: 2px;
 }
 
-.mockup-phone .display {
-  overflow: hidden;
-  border-radius: 40px;
-  margin-top: -25px;
-}
-
 .mockup-browser .mockup-browser-toolbar .input {
   position: relative;
   margin-left: auto;
@@ -1423,6 +1417,23 @@ a.puzzle-card:hover {
   color: var(--color-gold);
 }
 
+.puzzle-card-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.puzzle-card-disabled:hover {
+  box-shadow: none;
+}
+
+.puzzle-card-disabled .puzzle-card-title {
+  color: var(--color-text-muted);
+}
+
+.puzzle-card-disabled:hover .puzzle-card-title {
+  color: var(--color-text-muted);
+}
+
 .puzzle-status-solved {
   font-weight: 600;
   --tw-text-opacity: 1;
@@ -1541,6 +1552,30 @@ a.puzzle-card:hover {
   font-family: system-ui, -apple-system, sans-serif;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+/* Page footer */
+
+.page-footer {
+  margin-top: auto;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+.page-footer-link {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(107 93 77 / var(--tw-text-opacity, 1));
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  text-decoration: none;
+}
+
+.page-footer-link:hover {
+  color: var(--color-gold);
 }
 
 /* Paintings puzzle */

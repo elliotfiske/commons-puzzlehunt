@@ -12,6 +12,7 @@ import Effect.Time
 import Html exposing (Html, a, div, h1, node, p, text)
 import Html.Attributes exposing (class, href, rel)
 import Lamdera as L
+import Pages.Help
 import Pages.Hub
 import Pages.Intro
 import Pages.Ledger
@@ -319,6 +320,9 @@ viewWithProgress model progress =
                 model.lastAnswerResult
                 progress.puzzle4Complete
 
+        HelpRoute ->
+            Pages.Help.view
+
         NotFoundRoute ->
             div [ class "page-wrapper" ]
                 [ div [ class "page-content" ]
@@ -326,6 +330,9 @@ viewWithProgress model progress =
                     , div [ class "divider-deco" ] []
                     , p [ class "body-text" ] [ text "This page doesn't exist." ]
                     , p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/" ] [ text "Return Home" ] ]
+                    ]
+                , div [ class "page-footer" ]
+                    [ a [ class "page-footer-link", href "/help" ] [ text "Need help?" ]
                     ]
                 ]
 

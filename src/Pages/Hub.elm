@@ -17,8 +17,11 @@ view progress =
                 [ puzzleCard "paintings-link" "The Paintings" "/paintings" progress.puzzle1Complete "7"
                 , puzzleCard "ledger-link" "Bootlegger's Ledger" "/ledger" progress.puzzle2Complete "3"
                 , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete "5"
-                , puzzleCard "tile-link" "The Hidden Tile" "/tile" progress.puzzle4Complete "7"
+                , puzzleCardUnderConstruction "tile-link" "The Hidden Tile"
                 ]
+            ]
+        , div [ class "page-footer" ]
+            [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
             ]
         ]
 
@@ -32,4 +35,12 @@ puzzleCard linkId title path isComplete revealedNumber =
 
           else
             p [ class "puzzle-status-locked" ] [ text "Not yet solved" ]
+        ]
+
+
+puzzleCardUnderConstruction : String -> String -> Html FrontendMsg
+puzzleCardUnderConstruction elementId title =
+    div [ id elementId, class "puzzle-card puzzle-card-disabled" ]
+        [ h2 [ class "puzzle-card-title" ] [ text title ]
+        , p [ class "puzzle-status-locked" ] [ text "Under Construction" ]
         ]

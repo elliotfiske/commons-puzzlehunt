@@ -21,6 +21,7 @@ routeParser =
         , map StashRoute (s "stash")
         , map parseStashFound (s "stash" </> string)
         , map TileRoute (s "tile")
+        , map HelpRoute (s "help")
         ]
 
 

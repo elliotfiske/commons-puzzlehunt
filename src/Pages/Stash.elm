@@ -2,6 +2,7 @@ module Pages.Stash exposing (viewFound, viewPuzzle)
 
 import Html exposing (Html, a, div, h1, h2, li, p, span, text, ul)
 import Html.Attributes exposing (class, href)
+import Html.Events exposing (onClick)
 import Types exposing (FrontendMsg(..), StashId(..), StashProgress)
 
 
@@ -32,6 +33,9 @@ viewPuzzle stashes =
 
               else
                 p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ] ]
+            ]
+        , div [ class "page-footer" ]
+            [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
             ]
         ]
 
@@ -107,5 +111,8 @@ viewFound stashId hasSeenIntro =
                         , a [ class "btn-brass inline-block mt-4", href "/" ] [ text "Begin the Hunt" ]
                         ]
                 ]
+            ]
+        , div [ class "page-footer" ]
+            [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
             ]
         ]

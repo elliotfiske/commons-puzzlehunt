@@ -52,6 +52,9 @@ view config inputValue answerResult isComplete =
                     , p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ] ]
                     ]
             ]
+        , div [ class "page-footer" ]
+            [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
+            ]
         ]
 
 

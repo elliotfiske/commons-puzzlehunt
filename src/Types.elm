@@ -28,6 +28,7 @@ type Route
     | StashRoute
     | StashFoundRoute StashId
     | TileRoute
+    | HelpRoute
     | NotFoundRoute
 
 
