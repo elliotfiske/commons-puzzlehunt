@@ -133,7 +133,7 @@ testCorrectPasswordShowsNumber =
             (\actions ->
                 [ actions.click 100 (Dom.id "begin-btn")
                 , actions.click 100 (Dom.id "paintings-link")
-                , actions.input 100 (Dom.id "password-input") "SPEAKEASY"
+                , actions.input 100 (Dom.id "password-input") "RAISE YOUR SPIRITS"
                 , actions.click 100 (Dom.id "submit-btn")
                 , actions.checkView 100 (Test.Html.Query.has [ text "The number is: 7" ])
                 ]

@@ -4,6 +4,7 @@ import Effect.Command as Command exposing (BackendOnly, Command)
 import Effect.Lamdera exposing (ClientId, SessionId)
 import Effect.Subscription as Subscription exposing (Subscription)
 import Lamdera as L
+import PuzzleData
 import SeqDict
 import Types exposing (BackendModel, BackendMsg(..), PuzzleId(..), StashId(..), ToBackend(..), ToFrontend(..), UserProgress)
 
@@ -103,25 +104,6 @@ update msg model =
 
 
 
--- Puzzle answers (password, revealed number)
-
-
-puzzleAnswers : PuzzleId -> ( String, String )
-puzzleAnswers puzzleId =
-    case puzzleId of
-        Puzzle1 ->
-            ( "RAISE YOUR SPIRITS", "7" )
-
-        Puzzle2 ->
-            ( "COOK THE BOOKS", "3" )
-
-        Puzzle3 ->
-            ( "no password for this one", "5" )
-
-        Puzzle4 ->
-            ( "LAST CALL", "7" )
-
-
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Command BackendOnly ToFrontend BackendMsg )
 updateFromFrontend sessionId clientId msg model =
     case msg of
@@ -151,11 +133,8 @@ updateFromFrontend sessionId clientId msg model =
 
         SubmitPuzzleAnswer puzzleId answer ->
             let
-                ( correctPassword, revealedNumber ) =
-                    puzzleAnswers puzzleId
-
                 isCorrect =
-                    String.toUpper (String.trim answer) == correctPassword
+                    String.toUpper (String.trim answer) == PuzzleData.password puzzleId
 
                 newModel =
                     if isCorrect then
@@ -188,7 +167,7 @@ updateFromFrontend sessionId clientId msg model =
 
                 response =
                     if isCorrect then
-                        PuzzleAnswerResult puzzleId (Just revealedNumber)
+                        PuzzleAnswerResult puzzleId (Just (PuzzleData.revealedNumber puzzleId))
 
                     else
                         PuzzleAnswerResult puzzleId Nothing

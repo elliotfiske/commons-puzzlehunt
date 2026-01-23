@@ -16,7 +16,7 @@ view =
             , div [ class "story-block" ]
                 [ p [ class "story-text" ] [ text "In 1924, this basement wasn't so much a ‘coworking space’ as it was a 'plastered pretense'." ]
                 , p [ class "story-text" ] [ text "These days, the SF Commons is filled with people drinking artisanal oat milk and discussing things like ‘synergy,’ but the building still remembers a time when the only thing ‘artisanal’ was the bathtub gin." ]
-                , p [ class "story-text" ] [ text "The secrets haven’t gone anywhere; they’ve simply " ]
+                , p [ class "story-text" ] [ text "The secrets haven’t gone anywhere; they're simply waiting for a particularly curious individual to uncover them." ]
                 ]
             , div [ class "divider-deco" ] []
             , div [ class "text-center" ]

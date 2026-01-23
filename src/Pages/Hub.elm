@@ -3,7 +3,8 @@ module Pages.Hub exposing (view)
 import Html exposing (Html, a, div, h1, h2, p, text)
 import Html.Attributes exposing (class, href, id)
 import Html.Events exposing (onClick)
-import Types exposing (FrontendMsg(..), UserProgress)
+import PuzzleData
+import Types exposing (FrontendMsg(..), PuzzleId(..), UserProgress)
 
 
 view : UserProgress -> Html FrontendMsg
@@ -14,9 +15,9 @@ view progress =
             , p [ class "body-text-muted" ] [ text "Find all four numbers to unlock the safe." ]
             , div [ class "divider-simple" ] []
             , div [ class "mt-8" ]
-                [ puzzleCard "paintings-link" "The Paintings" "/paintings" progress.puzzle1Complete "7"
-                , puzzleCard "ledger-link" "Bootlegger's Ledger" "/ledger" progress.puzzle2Complete "3"
-                , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete "5"
+                [ puzzleCard "paintings-link" "The Paintings" "/paintings" progress.puzzle1Complete (PuzzleData.revealedNumber Puzzle1)
+                , puzzleCard "ledger-link" "Bootlegger's Ledger" "/ledger" progress.puzzle2Complete (PuzzleData.revealedNumber Puzzle2)
+                , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete (PuzzleData.revealedNumber Puzzle3)
                 , puzzleCardUnderConstruction "tile-link" "The Hidden Tile"
                 ]
             ]

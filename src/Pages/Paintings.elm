@@ -25,13 +25,13 @@ view inputValue answerResult isComplete =
                     Correct _ number ->
                         div [ class "text-center mt-8" ]
                             [ p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]
-                            , a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ]
+                            , a [ class "back-link", href "/hub" ] [ text "Back to Hub" ]
                             ]
 
                     _ ->
                         div [ class "text-center mt-8" ]
                             [ p [ class "feedback-success" ] [ text "Already solved!" ]
-                            , a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ]
+                            , a [ class "back-link", href "/hub" ] [ text "Back to Hub" ]
                             ]
 
               else
@@ -49,7 +49,7 @@ view inputValue answerResult isComplete =
                         , button [ id "submit-btn", class "btn-brass w-full", type_ "submit", onClick (SubmitAnswer Puzzle1) ] [ text "Submit" ]
                         ]
                     , viewAnswerFeedback answerResult
-                    , p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ] ]
+                    , p [ class "text-center mt-6" ] [ a [ class "back-link", href "/hub" ] [ text "Back to Hub" ] ]
                     ]
             ]
         , div [ class "page-footer" ]

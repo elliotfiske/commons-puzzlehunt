@@ -3,7 +3,8 @@ module Pages.Stash exposing (viewFound, viewPuzzle)
 import Html exposing (Html, a, div, h1, h2, li, p, span, text, ul)
 import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
-import Types exposing (FrontendMsg(..), StashId(..), StashProgress)
+import PuzzleData
+import Types exposing (FrontendMsg(..), PuzzleId(..), StashId(..), StashProgress)
 
 
 viewPuzzle : StashProgress -> Html FrontendMsg
@@ -27,12 +28,12 @@ viewPuzzle stashes =
                 ]
             , if allFound then
                 div [ class "text-center mt-8" ]
-                    [ p [ class "feedback-success" ] [ text "All stashes found! The number is: 5" ]
-                    , a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ]
+                    [ p [ class "feedback-success" ] [ text ("All stashes found! The number is: " ++ PuzzleData.revealedNumber Puzzle3) ]
+                    , a [ class "back-link", href "/hub" ] [ text "Back to Hub" ]
                     ]
 
               else
-                p [ class "text-center mt-6" ] [ a [ class "link-gold", href "/hub" ] [ text "Back to Hub" ] ]
+                p [ class "text-center mt-6" ] [ a [ class "back-link", href "/hub" ] [ text "Back to Hub" ] ]
             ]
         , div [ class "page-footer" ]
             [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
