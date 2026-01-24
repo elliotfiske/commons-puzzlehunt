@@ -83,6 +83,7 @@ type alias FrontendModel =
 
 type alias BackendModel =
     { userProgress : SeqDict Effect.Lamdera.SessionId UserProgress
+    , sessionClients : SeqDict Effect.Lamdera.SessionId (List Effect.Lamdera.ClientId)
     }
 
 

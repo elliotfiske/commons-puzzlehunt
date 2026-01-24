@@ -56,7 +56,9 @@ subscriptions _ =
 
 init : ( Model, Command restriction toMsg BackendMsg )
 init =
-    ( { userProgress = SeqDict.empty }
+    ( { userProgress = SeqDict.empty
+      , sessionClients = SeqDict.empty
+      }
     , Command.none
     )
 
@@ -94,13 +96,34 @@ update msg model =
             let
                 progress =
                     getProgress sessionId model
+
+                currentClients =
+                    SeqDict.get sessionId model.sessionClients
+                        |> Maybe.withDefault []
+
+                newClients =
+                    clientId :: currentClients
+
+                newModel =
+                    { model | sessionClients = SeqDict.insert sessionId newClients model.sessionClients }
             in
-            ( model
+            ( newModel
             , Effect.Lamdera.sendToFrontend clientId (InitialState progress)
             )
 
-        ClientDisconnected _ _ ->
-            ( model, Command.none )
+        ClientDisconnected sessionId clientId ->
+            let
+                currentClients =
+                    SeqDict.get sessionId model.sessionClients
+                        |> Maybe.withDefault []
+
+                newClients =
+                    List.filter (\c -> c /= clientId) currentClients
+
+                newModel =
+                    { model | sessionClients = SeqDict.insert sessionId newClients model.sessionClients }
+            in
+            ( newModel, Command.none )
 
 
 
@@ -209,7 +232,15 @@ updateFromFrontend sessionId clientId msg model =
 
                 newModel =
                     { model | userProgress = SeqDict.insert sessionId newProgress model.userProgress }
+
+                -- Notify all clients for this session
+                clients =
+                    SeqDict.get sessionId model.sessionClients
+                        |> Maybe.withDefault []
+
+                commands =
+                    clients
+                        |> List.map (\cid -> Effect.Lamdera.sendToFrontend cid (StashMarked stashId))
+                        |> Command.batch
             in
-            ( newModel
-            , Effect.Lamdera.sendToFrontend clientId (StashMarked stashId)
-            )
+            ( newModel, commands )

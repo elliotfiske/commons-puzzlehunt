@@ -26,6 +26,7 @@ tests =
     , testWrongPasswordShowsIncorrect
     , testCorrectPasswordShowsNumber
     , testStashFoundPageForNewUser
+    , testStashBroadcastToSameSession
     ]
 
 
@@ -155,6 +156,59 @@ testStashFoundPageForNewUser =
             (\client ->
                 [ client.checkView 100 (Test.Html.Query.has [ exactText "You found a stash!" ])
                 , client.checkView 100 (Test.Html.Query.has [ exactText "Begin the Hunt" ])
+                ]
+            )
+        ]
+
+
+testStashBroadcastToSameSession : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
+testStashBroadcastToSameSession =
+    Effect.Test.start
+        "Stash found broadcasts to all clients in same session but not other sessions"
+        (Effect.Time.millisToPosix 0)
+        config
+        [ -- Client A (session7): Start the hunt and go to stash page
+          Effect.Test.connectFrontend
+            1000
+            (Effect.Lamdera.sessionIdFromString "session7")
+            "/"
+            { width = 800, height = 600 }
+            (\clientA ->
+                [ clientA.click 100 (Dom.id "begin-btn")
+                , clientA.click 100 (Dom.id "stash-link")
+                , -- Initially, Moonshine should not be found
+                  clientA.checkView 100 (Test.Html.Query.hasNot [ exactText "Found!" ])
+                , -- Connect Client B (same session) who scans a QR code
+                  Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "session7")
+                    "/stash/jonathans-moonshine"
+                    { width = 800, height = 600 }
+                    (\clientB ->
+                        [ -- Client B sees the "found" page
+                          clientB.checkView 100 (Test.Html.Query.has [ exactText "You found a stash!" ])
+                        , -- Wait for backend to process and broadcast
+                          Effect.Test.andThen 500
+                            (\_ ->
+                                [ -- Client A should now see "Found!" due to broadcast
+                                  clientA.checkView 0 (Test.Html.Query.has [ exactText "Found!" ])
+                                ]
+                            )
+                        ]
+                    )
+                , -- Connect Client C (different session) who should NOT see the stash found
+                  Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "session8")
+                    "/"
+                    { width = 800, height = 600 }
+                    (\clientC ->
+                        [ clientC.click 100 (Dom.id "begin-btn")
+                        , clientC.click 100 (Dom.id "stash-link")
+                        , -- Client C should NOT see any "Found!" since they're a different session
+                          clientC.checkView 100 (Test.Html.Query.hasNot [ exactText "Found!" ])
+                        ]
+                    )
                 ]
             )
         ]
