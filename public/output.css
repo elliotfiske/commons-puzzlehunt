@@ -1560,6 +1560,15 @@ a.puzzle-card:hover {
   color: rgb(139 0 0 / var(--tw-text-opacity, 1));
 }
 
+.feedback-hint {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
+  font-style: italic;
+  --tw-text-opacity: 1;
+  color: rgb(184 134 11 / var(--tw-text-opacity, 1));
+}
+
 /* Form layout */
 
 .puzzle-form {

@@ -355,6 +355,10 @@
     @apply text-[#8b0000] text-center py-4;
   }
 
+  .feedback-hint {
+    @apply text-[#b8860b] text-center py-4 italic;
+  }
+
   /* Form layout */
   .puzzle-form {
     @apply flex flex-col gap-4 my-6;

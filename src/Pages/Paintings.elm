@@ -84,6 +84,13 @@ viewAnswerFeedback result =
             else
                 text ""
 
+        IncorrectButClose puzzleId ->
+            if puzzleId == Puzzle1 then
+                p [ class "feedback-hint" ] [ text "You're on the right track! But what does it SAY above the pull-up bar?" ]
+
+            else
+                text ""
+
         Correct puzzleId number ->
             if puzzleId == Puzzle1 then
                 p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]

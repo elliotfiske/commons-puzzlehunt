@@ -139,9 +139,13 @@ update msg model =
             ( { model | puzzleInput = value }, Command.none )
 
         SubmitAnswer puzzleId ->
-            ( model
-            , Effect.Lamdera.sendToBackend (SubmitPuzzleAnswer puzzleId model.puzzleInput)
-            )
+            if isCloseAnswer puzzleId model.puzzleInput then
+                ( { model | lastAnswerResult = IncorrectButClose puzzleId }, Command.none )
+
+            else
+                ( model
+                , Effect.Lamdera.sendToBackend (SubmitPuzzleAnswer puzzleId model.puzzleInput)
+                )
 
         ClickedBegin ->
             ( model
@@ -248,6 +252,23 @@ markStashFound stashId progress =
             newStashes.moonshine && newStashes.whiskey && newStashes.gin && newStashes.bourbon && newStashes.rum
     in
     { progress | puzzle3Stashes = newStashes, puzzle3Complete = allFound }
+
+
+isCloseAnswer : PuzzleId -> String -> Bool
+isCloseAnswer puzzleId input =
+    let
+        normalized =
+            input
+                |> String.toUpper
+                |> String.replace " " ""
+                |> String.replace "-" ""
+    in
+    case puzzleId of
+        Puzzle1 ->
+            normalized == "ABOVETHEPULLUPBAR"
+
+        _ ->
+            False
 
 
 view : Model -> Effect.Browser.Document FrontendMsg

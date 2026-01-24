@@ -70,6 +70,7 @@ type AnswerResult
     = NoAnswerYet
     | Incorrect PuzzleId
     | Correct PuzzleId String
+    | IncorrectButClose PuzzleId
 
 
 type alias FrontendModel =

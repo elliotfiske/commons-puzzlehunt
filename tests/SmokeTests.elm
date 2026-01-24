@@ -23,11 +23,72 @@ tests =
     [ testFirstVisitShowsIntro
     , testClickingBeginGoesToHub
     , testReturningUserSkipsIntro
-    , testWrongPasswordShowsIncorrect
     , testCorrectPasswordShowsNumber
     , testStashFoundPageForNewUser
     , testStashBroadcastToSameSession
     ]
+        ++ paintingsInputTests
+
+
+type ExpectedResult
+    = ExpectHint
+    | ExpectIncorrect
+
+
+paintingsInputTests : List (Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel)
+paintingsInputTests =
+    List.indexedMap paintingsInputTest
+        [ ( "ABOVE THE PULLUP BAR", ExpectHint )
+        , ( "above the pullup bar", ExpectHint )
+        , ( "Above the pull-up bar", ExpectHint )
+        , ( "ABOVETHEPULLUPBAR", ExpectHint )
+        , ( "WRONG ANSWER", ExpectIncorrect )
+        , ( "above the bar", ExpectIncorrect )
+        ]
+
+
+paintingsInputTest : Int -> ( String, ExpectedResult ) -> Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
+paintingsInputTest index ( input, expected ) =
+    let
+        sessionId =
+            "paintings-input-" ++ String.fromInt index
+
+        ( testName, viewChecks ) =
+            case expected of
+                ExpectHint ->
+                    ( "Paintings: \"" ++ input ++ "\" shows hint"
+                    , \actions ->
+                        [ actions.checkView 100 (Test.Html.Query.has [ text "You're on the right track" ])
+                        , actions.checkView 100 (Test.Html.Query.hasNot [ text "Incorrect" ])
+                        ]
+                    )
+
+                ExpectIncorrect ->
+                    ( "Paintings: \"" ++ input ++ "\" shows incorrect"
+                    , \actions ->
+                        [ actions.checkView 100 (Test.Html.Query.has [ text "Incorrect" ])
+                        , actions.checkView 100 (Test.Html.Query.hasNot [ text "You're on the right track" ])
+                        ]
+                    )
+    in
+    Effect.Test.start
+        testName
+        (Effect.Time.millisToPosix 0)
+        config
+        [ Effect.Test.connectFrontend
+            1000
+            (Effect.Lamdera.sessionIdFromString sessionId)
+            "/"
+            { width = 800, height = 600 }
+            (\actions ->
+                [ actions.click 100 (Dom.id "begin-btn")
+                , actions.click 100 (Dom.id "paintings-link")
+                , actions.input 100 (Dom.id "password-input") input
+                , actions.click 100 (Dom.id "submit-btn")
+                ]
+                    ++ viewChecks actions
+            )
+        ]
 
 
 testFirstVisitShowsIntro : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
@@ -93,28 +154,6 @@ testReturningUserSkipsIntro =
             (\actions ->
                 [ -- Should skip intro and show hub
                   actions.checkView 100 (Test.Html.Query.has [ exactText "Puzzle Hub" ])
-                ]
-            )
-        ]
-
-
-testWrongPasswordShowsIncorrect : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
-testWrongPasswordShowsIncorrect =
-    Effect.Test.start
-        "Wrong password shows incorrect"
-        (Effect.Time.millisToPosix 0)
-        config
-        [ Effect.Test.connectFrontend
-            1000
-            (Effect.Lamdera.sessionIdFromString "session4")
-            "/"
-            { width = 800, height = 600 }
-            (\actions ->
-                [ actions.click 100 (Dom.id "begin-btn")
-                , actions.click 100 (Dom.id "paintings-link")
-                , actions.input 100 (Dom.id "password-input") "WRONGPASSWORD"
-                , actions.click 100 (Dom.id "submit-btn")
-                , actions.checkView 100 (Test.Html.Query.has [ text "Incorrect" ])
                 ]
             )
         ]
@@ -217,7 +256,7 @@ testStashBroadcastToSameSession =
 safeUrl : Url
 safeUrl =
     { protocol = Url.Https
-    , host = "puzzle.lamdera.app"
+    , host = "speakeasy.lamdera.app"
     , port_ = Nothing
     , path = "/"
     , query = Nothing

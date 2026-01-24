@@ -71,6 +71,9 @@ viewAnswerFeedback result currentPuzzle =
             else
                 text ""
 
+        IncorrectButClose _ ->
+            text ""
+
         Correct puzzleId number ->
             if puzzleId == currentPuzzle then
                 p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]
