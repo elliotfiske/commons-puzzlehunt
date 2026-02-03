@@ -24,7 +24,7 @@ view config inputValue answerResult isComplete =
                 case answerResult of
                     Correct _ number ->
                         div [ class "text-center mt-8" ]
-                            [ p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]
+                            [ p [ class "feedback-success" ] [ text ("Correct! One part of the combination is: " ++ number) ]
                             , a [ class "back-link", href "/hub" ] [ text "Back to Hub" ]
                             ]
 
@@ -76,7 +76,7 @@ viewAnswerFeedback result currentPuzzle =
 
         Correct puzzleId number ->
             if puzzleId == currentPuzzle then
-                p [ class "feedback-success" ] [ text ("Correct! The number is: " ++ number) ]
+                p [ class "feedback-success" ] [ text ("Correct! One part of the combination is: " ++ number) ]
 
             else
                 text ""

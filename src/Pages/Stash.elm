@@ -28,7 +28,7 @@ viewPuzzle stashes =
                 ]
             , if allFound then
                 div [ class "text-center mt-8" ]
-                    [ p [ class "feedback-success" ] [ text ("All stashes found! The number is: " ++ PuzzleData.revealedNumber Puzzle3) ]
+                    [ p [ class "feedback-success" ] [ text ("All stashes found! One part of the combination is: " ++ PuzzleData.revealedNumber Puzzle3) ]
                     , a [ id "back-to-hub-link", class "back-link", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ]
                     ]
 
