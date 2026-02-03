@@ -9,15 +9,7 @@ import Types exposing (AnswerResult(..), FrontendMsg(..), PuzzleId(..))
 view : String -> AnswerResult -> Bool -> Html FrontendMsg
 view inputValue answerResult isComplete =
     div [ class "page-wrapper" ]
-        [ div
-            [ class
-                (if isComplete then
-                    "page-content"
-
-                 else
-                    "page-content page-content-with-sticky-footer"
-                )
-            ]
+        [ div [ class "page-content page-content-with-sticky-footer" ]
             [ h1 [ class "heading-deco" ] [ text "The Proof is in the Pigment" ]
             , div [ class "divider-deco" ] []
             , p [ class "body-text" ] [ text "Several paintings hang around the Commons. Find them all and spell out the clue to discover the password." ]
@@ -28,42 +20,27 @@ view inputValue answerResult isComplete =
                 , viewPainting 4
                 , viewPainting 5
                 ]
+            ]
+        , div [ class "puzzle-form-sticky" ]
+            [ viewAnswerFeedback answerResult isComplete
             , if isComplete then
-                case answerResult of
-                    Correct _ number ->
-                        div [ class "text-center mt-8" ]
-                            [ p [ class "feedback-success" ] [ text ("Correct! One part of the combination is: " ++ number) ]
-                            , a [ id "back-to-hub-link", class "back-link", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ]
-                            ]
-
-                    _ ->
-                        div [ class "text-center mt-8" ]
-                            [ p [ class "feedback-success" ] [ text "Already solved!" ]
-                            , a [ id "back-to-hub-link", class "back-link", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ]
-                            ]
+                text ""
 
               else
-                p [ class "text-center mt-6" ] [ a [ id "back-to-hub-link", class "back-link", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ] ]
-            ]
-        , if isComplete then
-            div [ class "page-footer" ]
-                [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
-                ]
-
-          else
-            form [ id "puzzle-form", class "puzzle-form-sticky", onSubmit (SubmitAnswer Puzzle1) ]
-                [ viewAnswerFeedback answerResult
-                , input
-                    [ id "password-input"
-                    , class "input-paper"
-                    , type_ "text"
-                    , placeholder "Enter password"
-                    , value inputValue
-                    , onInput PuzzleInputChanged
+                form [ id "puzzle-form", class "sticky-form-inner", onSubmit (SubmitAnswer Puzzle1) ]
+                    [ input
+                        [ id "password-input"
+                        , class "input-paper"
+                        , type_ "text"
+                        , placeholder "Enter password"
+                        , value inputValue
+                        , onInput PuzzleInputChanged
+                        ]
+                        []
+                    , button [ id "submit-btn", class "btn-brass", type_ "submit", onClick (SubmitAnswer Puzzle1) ] [ text "Submit" ]
                     ]
-                    []
-                , button [ id "submit-btn", class "btn-brass", type_ "submit", onClick (SubmitAnswer Puzzle1) ] [ text "Submit" ]
-                ]
+            , a [ id "back-to-hub-link", class "btn-brass btn-brass-outline", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ]
+            ]
         ]
 
 
@@ -80,11 +57,15 @@ viewPainting number =
         ]
 
 
-viewAnswerFeedback : AnswerResult -> Html FrontendMsg
-viewAnswerFeedback result =
+viewAnswerFeedback : AnswerResult -> Bool -> Html FrontendMsg
+viewAnswerFeedback result isComplete =
     case result of
         NoAnswerYet ->
-            text ""
+            if isComplete then
+                p [ class "feedback-success" ] [ text "Already solved!" ]
+
+            else
+                text ""
 
         Incorrect puzzleId ->
             if puzzleId == Puzzle1 then
