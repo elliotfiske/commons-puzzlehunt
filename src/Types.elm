@@ -27,7 +27,6 @@ type Route
     | LedgerRoute
     | StashRoute
     | StashFoundRoute StashId
-    | TileRoute
     | HelpRoute
     | NotFoundRoute
 
@@ -36,7 +35,6 @@ type PuzzleId
     = Puzzle1
     | Puzzle2
     | Puzzle3
-    | Puzzle4
 
 
 type StashId
@@ -62,7 +60,6 @@ type alias UserProgress =
     , puzzle2Complete : Bool
     , puzzle3Stashes : StashProgress
     , puzzle3Complete : Bool
-    , puzzle4Complete : Bool
     }
 
 

@@ -76,7 +76,6 @@ emptyProgress =
         , rum = False
         }
     , puzzle3Complete = False
-    , puzzle4Complete = False
     }
 
 
@@ -176,9 +175,6 @@ updateFromFrontend sessionId clientId msg model =
 
                                         Puzzle3 ->
                                             { progress | puzzle3Complete = True }
-
-                                        Puzzle4 ->
-                                            { progress | puzzle4Complete = True }
 
                                 else
                                     progress

@@ -2,7 +2,7 @@
 This is the website for a puzzle hunt based out of the SF Commons, a coworking and event space. The puzzles are "speakeasy" themed and revolve around a fictional historical speakeasy that used to be at the site of the Commons.
 
 # Puzzles
-There are 4 main puzzles in the puzzle hunt. They all result in a number – the goal of the hunt is to unlock a Masterlock safe with a 4-digit passcode. The "home screen" of the app links out to the main puzzles, and shows if the user has completed them. If the user has completed the puzzles, they will see the number "answer" there.
+There are 3 main puzzles in the puzzle hunt. They each result in a character – the goal of the hunt is to unlock a Masterlock safe with a 3-character code (J0E). The "home screen" of the app links out to the main puzzles, and shows if the user has completed them. If the user has completed the puzzles, they will see the number "answer" there.
 
 The app will have basic "persisent storage", based solely on the default stable "session ID" as provided by Lamdera. This means a user's state will persist, but if they change devices or clear cookies their state will be erased. This is acceptable because the user can just re-enter passwords they've previously used to get back to their previous state.
 
@@ -21,12 +21,6 @@ There will be a Book Cipher (3 numbers denoting page, line, word) using books fo
 
 ## Puzzle 3: Smuggler's Stash
 There will be a series of QR codes hidden around the Commons. Each QR code will go to a link like https://puzzle.lamdera.app/stash/moonshine. The puzzle page will track which QR codes the user has found so far, with a small hint for each one. When the user scans a QR code, it will show a celebratory "you found it!" message and the row for that stash will be marked as "completed" on the puzzle page. If somebody scans a QR code without "starting" the  puzzle hunt, they'll be taken to a screen that says "You've found a secret!" with a link to go to the Introduction.
-
-## Puzzle 4: TBD
-Potential elements:
-- I have an extra "Tile" tracker that could be connected to a phone hidden in the Commons. One step of the puzzle would be to take the Tile and double-tap it to make the phone ring. The phone would have a post-it note on it with a password.
-- I have a Masterlock with a letters/numbers combination. I could put it on a box to hide some element of the puzzle (maybe that's where the Tile could be?)
-- There is a board with polaroids of every Commons member. I could hide some fake polaroids with puzzle elements on it.
 
 # Website
 This repository is the code for the website. The purpose of the website is to provide an "entry point" to the puzzles, host some of the interactive elements, and serve as a way for participants to check their answers.

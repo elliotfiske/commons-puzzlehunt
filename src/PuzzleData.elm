@@ -10,16 +10,13 @@ revealedNumber : PuzzleId -> String
 revealedNumber puzzleId =
     case puzzleId of
         Puzzle1 ->
-            "7"
+            "J"
 
         Puzzle2 ->
-            "3"
+            "0"
 
         Puzzle3 ->
-            "5"
-
-        Puzzle4 ->
-            "7"
+            "E"
 
 
 {-| The password required to solve each puzzle.
@@ -36,6 +33,3 @@ password puzzleId =
 
         Puzzle3 ->
             "no password for this one"
-
-        Puzzle4 ->
-            "LAST CALL"

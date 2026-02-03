@@ -12,13 +12,12 @@ view progress =
     div [ class "page-wrapper" ]
         [ div [ class "page-content" ]
             [ h1 [ class "heading-deco" ] [ text "Puzzle Hub" ]
-            , p [ class "body-text-muted" ] [ text "Find all four numbers to unlock the safe." ]
+            , p [ class "body-text-muted" ] [ text "Find all three characters to unlock the safe." ]
             , div [ class "divider-simple" ] []
             , div [ class "mt-8" ]
                 [ puzzleCard "paintings-link" "The Paintings" "/paintings" progress.puzzle1Complete (PuzzleData.revealedNumber Puzzle1)
                 , puzzleCard "ledger-link" "Bootlegger's Ledger" "/ledger" progress.puzzle2Complete (PuzzleData.revealedNumber Puzzle2)
                 , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete (PuzzleData.revealedNumber Puzzle3)
-                , puzzleCardUnderConstruction "tile-link" "The Hidden Tile"
                 ]
             ]
         , div [ class "page-footer" ]
@@ -39,9 +38,3 @@ puzzleCard linkId title path isComplete revealedNumber =
         ]
 
 
-puzzleCardUnderConstruction : String -> String -> Html FrontendMsg
-puzzleCardUnderConstruction elementId title =
-    div [ id elementId, class "puzzle-card puzzle-card-disabled" ]
-        [ h2 [ class "puzzle-card-title" ] [ text title ]
-        , p [ class "puzzle-status-locked" ] [ text "Under Construction" ]
-        ]

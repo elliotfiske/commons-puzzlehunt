@@ -104,9 +104,6 @@ update msg model =
                         StashRoute ->
                             ( "", NoAnswerYet )
 
-                        TileRoute ->
-                            ( "", NoAnswerYet )
-
                         _ ->
                             ( model.puzzleInput, model.lastAnswerResult )
 
@@ -221,9 +218,6 @@ markPuzzleComplete puzzleId progress =
         Puzzle3 ->
             { progress | puzzle3Complete = True }
 
-        Puzzle4 ->
-            { progress | puzzle4Complete = True }
-
 
 markStashFound : StashId -> UserProgress -> UserProgress
 markStashFound stashId progress =
@@ -330,16 +324,6 @@ viewWithProgress model progress =
 
         StashFoundRoute stashId ->
             Pages.Stash.viewFound stashId progress.hasSeenIntro
-
-        TileRoute ->
-            Pages.Puzzle.view
-                { title = "The Hidden Tile"
-                , description = "Somewhere in the Commons, a secret awaits discovery. Find the hidden tile to reveal the final password."
-                , puzzleId = Puzzle4
-                }
-                model.puzzleInput
-                model.lastAnswerResult
-                progress.puzzle4Complete
 
         HelpRoute ->
             Pages.Help.view
