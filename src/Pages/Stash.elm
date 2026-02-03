@@ -17,7 +17,7 @@ viewPuzzle stashes =
         [ div [ class "page-content" ]
             [ h1 [ class "heading-deco" ] [ text "Smuggler's Stash" ]
             , div [ class "divider-deco" ] []
-            , p [ class "body-text" ] [ text "Look for the SHADY place where the LIGHT is found" ]
+            , p [ class "body-text" ] [ text "There's a few SHADY places around here. Shed some LIGHT on them and scan each stash to reveal the next piece of the puzzle." ]
             , h2 [ class "heading-secondary mt-8" ] [ text "Stashes Found:" ]
             , ul [ class "stash-list" ]
                 [ stashItem "Moonshine" stashes.moonshine
