@@ -28,6 +28,7 @@ type Route
     | StashRoute
     | StashFoundRoute StashId
     | HelpRoute
+    | DebugResetRoute
     | NotFoundRoute
 
 
@@ -94,6 +95,7 @@ type FrontendMsg
     | ClickedBegin
     | NavigateTo String
     | Tick
+    | ResetProgress
 
 
 type ToBackend
@@ -101,6 +103,7 @@ type ToBackend
     | MarkIntroSeen
     | SubmitPuzzleAnswer PuzzleId String
     | MarkStashFound StashId
+    | ResetAllProgress
 
 
 type BackendMsg
@@ -113,3 +116,4 @@ type ToFrontend
     = InitialState UserProgress
     | PuzzleAnswerResult PuzzleId (Maybe String)
     | StashMarked StashId
+    | ProgressReset

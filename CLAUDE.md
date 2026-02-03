@@ -32,3 +32,5 @@ This repository uses the Elm language and the Lamdera runtime. Elm is a type-saf
 
 ## Testing
 Maintaining a robust E2E test suite is important as it allows us to move quickly without accidentally introducing regressions. Lamdera ships with program-test, an E2E test suite that runs in milliseconds but still provides high fidelity to the actual final user experience.
+
+Run tests with: `elm-test`

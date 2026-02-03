@@ -240,3 +240,10 @@ updateFromFrontend sessionId clientId msg model =
                         |> Command.batch
             in
             ( newModel, commands )
+
+        ResetAllProgress ->
+            let
+                newModel =
+                    { model | userProgress = SeqDict.remove sessionId model.userProgress }
+            in
+            ( newModel, Effect.Lamdera.sendToFrontend clientId ProgressReset )

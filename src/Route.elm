@@ -21,6 +21,7 @@ routeParser =
         , map StashRoute (s "stash")
         , map parseStashFound (s "stash" </> string)
         , map HelpRoute (s "help")
+        , map DebugResetRoute (s "debug-reset")
         ]
 
 

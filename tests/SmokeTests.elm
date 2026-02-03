@@ -28,6 +28,7 @@ tests =
     , testStashBroadcastToSameSession
     , testFinaleAppearsWhenAllPuzzlesSolved
     , testFinaleHiddenWhenPuzzlesIncomplete
+    , testDebugResetClearsProgress
     ]
         ++ paintingsInputTests
 
@@ -346,6 +347,42 @@ testFinaleHiddenWhenPuzzlesIncomplete =
                 , actions.click 100 (Dom.id "back-to-hub-link")
                 , -- Finale should still not be visible
                   actions.checkView 100 (Test.Html.Query.hasNot [ exactText "The Code is Yours" ])
+                ]
+            )
+        ]
+
+
+testDebugResetClearsProgress : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
+testDebugResetClearsProgress =
+    Effect.Test.start
+        "Debug reset clears all progress"
+        (Effect.Time.millisToPosix 0)
+        config
+        [ Effect.Test.connectFrontend
+            1000
+            (Effect.Lamdera.sessionIdFromString "debug-reset-session")
+            "/"
+            { width = 800, height = 600 }
+            (\actions ->
+                [ -- Complete intro to establish some state
+                  actions.click 100 (Dom.id "begin-btn")
+                , actions.checkView 100 (Test.Html.Query.has [ exactText "Puzzle Hub" ])
+                , -- Navigate to debug reset page
+                  Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "debug-reset-session")
+                    "/debug-reset"
+                    { width = 800, height = 600 }
+                    (\resetActions ->
+                        [ -- Should see a reset button
+                          resetActions.checkView 100 (Test.Html.Query.has [ exactText "Reset All Progress" ])
+                        , -- Click the reset button
+                          resetActions.click 100 (Dom.id "reset-btn")
+                        , -- Should be redirected to intro (showing state was reset)
+                          resetActions.checkView 100 (Test.Html.Query.has [ exactText "The Secret of the Commons" ])
+                        , resetActions.checkView 100 (Test.Html.Query.has [ exactText "Begin" ])
+                        ]
+                    )
                 ]
             )
         ]

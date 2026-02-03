@@ -10,8 +10,9 @@ import Effect.Command as Command exposing (Command, FrontendOnly)
 import Effect.Lamdera
 import Effect.Subscription as Subscription exposing (Subscription)
 import Effect.Time
-import Html exposing (Html, a, div, h1, node, p, text)
-import Html.Attributes exposing (class, href, rel)
+import Html exposing (Html, a, button, div, h1, node, p, text)
+import Html.Attributes exposing (class, href, id, rel)
+import Html.Events exposing (onClick)
 import Lamdera as L
 import Pages.Help
 import Pages.Hub
@@ -158,6 +159,11 @@ update msg model =
             , Effect.Browser.Navigation.pushUrl model.key path
             )
 
+        ResetProgress ->
+            ( model
+            , Effect.Lamdera.sendToBackend ResetAllProgress
+            )
+
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Command FrontendOnly ToBackend FrontendMsg )
 updateFromBackend msg model =
@@ -205,6 +211,23 @@ updateFromBackend msg model =
                     Maybe.map (markStashFound stashId) model.userProgress
             in
             ( { model | userProgress = newProgress }, Command.none )
+
+        ProgressReset ->
+            ( { model
+                | userProgress =
+                    Just
+                        { hasSeenIntro = False
+                        , puzzle1Complete = False
+                        , puzzle2Complete = False
+                        , puzzle3Stashes = { moonshine = False, whiskey = False, gin = False, bourbon = False, rum = False }
+                        , puzzle3Complete = False
+                        }
+                , puzzleInput = ""
+                , lastAnswerResult = NoAnswerYet
+                , route = IntroRoute
+              }
+            , Effect.Browser.Navigation.pushUrl model.key "/"
+            )
 
 
 markPuzzleComplete : PuzzleId -> UserProgress -> UserProgress
@@ -328,6 +351,16 @@ viewWithProgress model progress =
 
         HelpRoute ->
             Pages.Help.view
+
+        DebugResetRoute ->
+            div [ class "page-wrapper" ]
+                [ div [ class "page-content" ]
+                    [ h1 [ class "heading-deco" ] [ text "Debug Reset" ]
+                    , div [ class "divider-deco" ] []
+                    , p [ class "body-text" ] [ text "This will reset all your progress and return you to the beginning." ]
+                    , button [ id "reset-btn", class "btn-brass", onClick ResetProgress ] [ text "Reset All Progress" ]
+                    ]
+                ]
 
         NotFoundRoute ->
             div [ class "page-wrapper" ]
