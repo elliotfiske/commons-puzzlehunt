@@ -61,14 +61,12 @@ view inputValue answerResult isComplete =
 
               else
                 div []
-                    [ p [ class "body-text-muted mt-6" ]
-                        [ text "Enter the first word to unlock the ledger:" ]
-                    , form [ id "puzzle-form", class "puzzle-form", onSubmit (SubmitAnswer Puzzle2) ]
+                    [ form [ id "puzzle-form", class "puzzle-form", onSubmit (SubmitAnswer Puzzle2) ]
                         [ input
                             [ id "password-input"
                             , class "input-paper"
                             , type_ "text"
-                            , placeholder "Enter the first word..."
+                            , placeholder "Enter the phrase..."
                             , value inputValue
                             , onInput PuzzleInputChanged
                             ]

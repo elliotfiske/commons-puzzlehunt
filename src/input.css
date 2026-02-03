@@ -304,8 +304,10 @@
   .puzzle-revealed-number {
     @apply text-5xl font-bold;
     color: var(--color-gold);
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: 'Roboto Mono', monospace;
     text-shadow: 0 0 20px rgba(212, 168, 85, 0.4);
+    font-variant-numeric: slashed-zero;
+    letter-spacing: 0.05em;
   }
 
   /* Stash tracker ledger */
