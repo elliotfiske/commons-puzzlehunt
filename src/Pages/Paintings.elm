@@ -9,7 +9,15 @@ import Types exposing (AnswerResult(..), FrontendMsg(..), PuzzleId(..))
 view : String -> AnswerResult -> Bool -> Html FrontendMsg
 view inputValue answerResult isComplete =
     div [ class "page-wrapper" ]
-        [ div [ class "page-content" ]
+        [ div
+            [ class
+                (if isComplete then
+                    "page-content"
+
+                 else
+                    "page-content page-content-with-sticky-footer"
+                )
+            ]
             [ h1 [ class "heading-deco" ] [ text "The Proof is in the Pigment" ]
             , div [ class "divider-deco" ] []
             , p [ class "body-text" ] [ text "Several paintings hang around the Commons. Find them all and spell out the clue to discover the password." ]
@@ -35,26 +43,27 @@ view inputValue answerResult isComplete =
                             ]
 
               else
-                div []
-                    [ form [ id "puzzle-form", class "puzzle-form", onSubmit (SubmitAnswer Puzzle1) ]
-                        [ input
-                            [ id "password-input"
-                            , class "input-paper"
-                            , type_ "text"
-                            , placeholder "Enter password"
-                            , value inputValue
-                            , onInput PuzzleInputChanged
-                            ]
-                            []
-                        , button [ id "submit-btn", class "btn-brass w-full", type_ "submit", onClick (SubmitAnswer Puzzle1) ] [ text "Submit" ]
-                        ]
-                    , viewAnswerFeedback answerResult
-                    , p [ class "text-center mt-6" ] [ a [ id "back-to-hub-link", class "back-link", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ] ]
+                p [ class "text-center mt-6" ] [ a [ id "back-to-hub-link", class "back-link", href "/hub", onClick (NavigateTo "/hub") ] [ text "Back to Hub" ] ]
+            ]
+        , if isComplete then
+            div [ class "page-footer" ]
+                [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
+                ]
+
+          else
+            form [ id "puzzle-form", class "puzzle-form-sticky", onSubmit (SubmitAnswer Puzzle1) ]
+                [ viewAnswerFeedback answerResult
+                , input
+                    [ id "password-input"
+                    , class "input-paper"
+                    , type_ "text"
+                    , placeholder "Enter password"
+                    , value inputValue
+                    , onInput PuzzleInputChanged
                     ]
-            ]
-        , div [ class "page-footer" ]
-            [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
-            ]
+                    []
+                , button [ id "submit-btn", class "btn-brass", type_ "submit", onClick (SubmitAnswer Puzzle1) ] [ text "Submit" ]
+                ]
         ]
 
 

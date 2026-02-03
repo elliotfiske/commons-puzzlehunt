@@ -6,4 +6,4 @@ module CssVersion exposing (version)
 
 version : String
 version =
-    "e2a40ad6"
+    "c19385db"

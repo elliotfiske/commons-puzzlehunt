@@ -34,3 +34,11 @@ This repository uses the Elm language and the Lamdera runtime. Elm is a type-saf
 Maintaining a robust E2E test suite is important as it allows us to move quickly without accidentally introducing regressions. Lamdera ships with program-test, an E2E test suite that runs in milliseconds but still provides high fidelity to the actual final user experience.
 
 Run tests with: `elm-test`
+
+## Building
+
+Verify the program builds with `lamdera make src/Frontend.elm src/Backend.elm`
+
+Deploy with `lamdera deploy`. However, if there are changes to Msgs or Types, you will need to finish the "migration" file that Lamdera creates for you. This is so that currently connected clients have all their data preserved when the new version is deployed, and any in-flight messages are properly migrated and processed.
+
+Build CSS with `npm run build:css`. This also updates the CssVersion.elm file, which is used to cache bust the CSS.
