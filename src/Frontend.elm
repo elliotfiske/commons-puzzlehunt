@@ -21,6 +21,7 @@ import Pages.Ledger
 import Pages.Paintings
 import Pages.Puzzle
 import Pages.Stash
+import Pages.Thanks
 import Route
 import Types exposing (AnswerResult(..), FrontendModel, FrontendMsg(..), PuzzleId(..), Route(..), StashId, ToBackend(..), ToFrontend(..), UserProgress)
 import Url
@@ -351,6 +352,9 @@ viewWithProgress model progress =
 
         HelpRoute ->
             Pages.Help.view
+
+        ThanksRoute ->
+            Pages.Thanks.view
 
         DebugResetRoute ->
             div [ class "page-wrapper" ]

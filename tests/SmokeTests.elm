@@ -29,6 +29,7 @@ tests =
     , testFinaleAppearsWhenAllPuzzlesSolved
     , testFinaleHiddenWhenPuzzlesIncomplete
     , testDebugResetClearsProgress
+    , testThanksPageShowsCorrectContent
     ]
         ++ paintingsInputTests
 
@@ -383,6 +384,27 @@ testDebugResetClearsProgress =
                         , resetActions.checkView 100 (Test.Html.Query.has [ exactText "Begin" ])
                         ]
                     )
+                ]
+            )
+        ]
+
+
+testThanksPageShowsCorrectContent : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
+testThanksPageShowsCorrectContent =
+    Effect.Test.start
+        "Thanks page shows correct content"
+        (Effect.Time.millisToPosix 0)
+        config
+        [ Effect.Test.connectFrontend
+            1000
+            (Effect.Lamdera.sessionIdFromString "thanks-test-session")
+            "/thanks"
+            { width = 800, height = 600 }
+            (\actions ->
+                [ actions.checkView 100 (Test.Html.Query.has [ exactText "Thanks for Playing!" ])
+                , actions.checkView 100 (Test.Html.Query.has [ text "We hope you enjoyed the puzzle hunt!" ])
+                , actions.checkView 100 (Test.Html.Query.has [ exactText "Share Your Feedback" ])
+                , actions.checkView 100 (Test.Html.Query.has [ exactText "Back to Puzzle Hub" ])
                 ]
             )
         ]

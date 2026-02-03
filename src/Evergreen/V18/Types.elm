@@ -1,23 +1,18 @@
-module Types exposing
-    ( AnswerResult(..)
-    , BackendModel
-    , BackendMsg(..)
-    , FrontendModel
-    , FrontendMsg(..)
-    , PuzzleId(..)
-    , Route(..)
-    , StashId(..)
-    , StashProgress
-    , ToBackend(..)
-    , ToFrontend(..)
-    , UserProgress
-    )
+module Evergreen.V18.Types exposing (..)
 
 import Effect.Browser
 import Effect.Browser.Navigation
 import Effect.Lamdera
-import SeqDict exposing (SeqDict)
+import SeqDict
 import Url
+
+
+type StashId
+    = Moonshine
+    | Whiskey
+    | Gin
+    | Bourbon
+    | Rum
 
 
 type Route
@@ -31,20 +26,6 @@ type Route
     | ThanksRoute
     | DebugResetRoute
     | NotFoundRoute
-
-
-type PuzzleId
-    = Puzzle1
-    | Puzzle2
-    | Puzzle3
-
-
-type StashId
-    = Moonshine
-    | Whiskey
-    | Gin
-    | Bourbon
-    | Rum
 
 
 type alias StashProgress =
@@ -65,6 +46,12 @@ type alias UserProgress =
     }
 
 
+type PuzzleId
+    = Puzzle1
+    | Puzzle2
+    | Puzzle3
+
+
 type AnswerResult
     = NoAnswerYet
     | Incorrect PuzzleId
@@ -82,8 +69,8 @@ type alias FrontendModel =
 
 
 type alias BackendModel =
-    { userProgress : SeqDict Effect.Lamdera.SessionId UserProgress
-    , sessionClients : SeqDict Effect.Lamdera.SessionId (List Effect.Lamdera.ClientId)
+    { userProgress : SeqDict.SeqDict Effect.Lamdera.SessionId UserProgress
+    , sessionClients : SeqDict.SeqDict Effect.Lamdera.SessionId (List Effect.Lamdera.ClientId)
     }
 
 
