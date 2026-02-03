@@ -26,6 +26,8 @@ tests =
     , testCorrectPasswordShowsNumber
     , testStashFoundPageForNewUser
     , testStashBroadcastToSameSession
+    , testFinaleAppearsWhenAllPuzzlesSolved
+    , testFinaleHiddenWhenPuzzlesIncomplete
     ]
         ++ paintingsInputTests
 
@@ -248,6 +250,102 @@ testStashBroadcastToSameSession =
                           clientC.checkView 100 (Test.Html.Query.hasNot [ exactText "Found!" ])
                         ]
                     )
+                ]
+            )
+        ]
+
+
+testFinaleAppearsWhenAllPuzzlesSolved : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
+testFinaleAppearsWhenAllPuzzlesSolved =
+    Effect.Test.start
+        "Finale appears when all puzzles solved"
+        (Effect.Time.millisToPosix 0)
+        config
+        [ Effect.Test.connectFrontend
+            1000
+            (Effect.Lamdera.sessionIdFromString "finale-test-session")
+            "/"
+            { width = 800, height = 600 }
+            (\actions ->
+                [ -- Complete intro
+                  actions.click 100 (Dom.id "begin-btn")
+                , -- Solve puzzle 1
+                  actions.click 100 (Dom.id "paintings-link")
+                , actions.input 100 (Dom.id "password-input") "RAISE YOUR SPIRITS"
+                , actions.click 100 (Dom.id "submit-btn")
+                , actions.click 100 (Dom.id "back-to-hub-link")
+                , -- Solve puzzle 2
+                  actions.click 100 (Dom.id "ledger-link")
+                , actions.input 100 (Dom.id "password-input") "COOK THE BOOKS"
+                , actions.click 100 (Dom.id "submit-btn")
+                , actions.click 100 (Dom.id "back-to-hub-link")
+                , -- Find all stashes for puzzle 3
+                  Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "finale-test-session")
+                    "/stash/jonathans-moonshine"
+                    { width = 800, height = 600 }
+                    (\_ -> [])
+                , Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "finale-test-session")
+                    "/stash/jonnys-whiskey"
+                    { width = 800, height = 600 }
+                    (\_ -> [])
+                , Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "finale-test-session")
+                    "/stash/josukes-gin"
+                    { width = 800, height = 600 }
+                    (\_ -> [])
+                , Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "finale-test-session")
+                    "/stash/jolenes-bourbon"
+                    { width = 800, height = 600 }
+                    (\_ -> [])
+                , Effect.Test.connectFrontend
+                    0
+                    (Effect.Lamdera.sessionIdFromString "finale-test-session")
+                    "/stash/jotaros-rum"
+                    { width = 800, height = 600 }
+                    (\_ -> [])
+                , -- Wait for stash updates to propagate, then check finale on hub
+                  Effect.Test.andThen 500
+                    (\_ ->
+                        [ -- Client is already on hub, just check for finale
+                          actions.checkView 100 (Test.Html.Query.has [ exactText "The Code is Yours" ])
+                        , actions.checkView 100 (Test.Html.Query.has [ text "lockbox awaits" ])
+                        ]
+                    )
+                ]
+            )
+        ]
+
+
+testFinaleHiddenWhenPuzzlesIncomplete : Effect.Test.EndToEndTest ToBackend FrontendMsg FrontendModel ToFrontend BackendMsg BackendModel
+testFinaleHiddenWhenPuzzlesIncomplete =
+    Effect.Test.start
+        "Finale hidden when puzzles incomplete"
+        (Effect.Time.millisToPosix 0)
+        config
+        [ Effect.Test.connectFrontend
+            1000
+            (Effect.Lamdera.sessionIdFromString "no-finale-session")
+            "/"
+            { width = 800, height = 600 }
+            (\actions ->
+                [ -- Complete intro and go to hub
+                  actions.click 100 (Dom.id "begin-btn")
+                , -- Finale should not be visible
+                  actions.checkView 100 (Test.Html.Query.hasNot [ exactText "The Code is Yours" ])
+                , -- Solve only puzzle 1
+                  actions.click 100 (Dom.id "paintings-link")
+                , actions.input 100 (Dom.id "password-input") "RAISE YOUR SPIRITS"
+                , actions.click 100 (Dom.id "submit-btn")
+                , actions.click 100 (Dom.id "back-to-hub-link")
+                , -- Finale should still not be visible
+                  actions.checkView 100 (Test.Html.Query.hasNot [ exactText "The Code is Yours" ])
                 ]
             )
         ]

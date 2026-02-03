@@ -289,12 +289,23 @@
     color: var(--color-text-muted);
   }
 
+  .puzzle-card-header {
+    @apply flex justify-between items-center;
+  }
+
   .puzzle-status-solved {
     @apply text-[#d4a855] font-semibold;
   }
 
   .puzzle-status-locked {
     @apply text-[#a69f8f];
+  }
+
+  .puzzle-revealed-number {
+    @apply text-5xl font-bold;
+    color: var(--color-gold);
+    font-family: Georgia, 'Times New Roman', serif;
+    text-shadow: 0 0 20px rgba(212, 168, 85, 0.4);
   }
 
   /* Stash tracker ledger */
@@ -327,6 +338,20 @@
   .stash-not-found::after {
     content: ' . . .';
     letter-spacing: 0.2em;
+  }
+
+  /* Finale section */
+  .finale-section {
+    @apply text-center mb-8 py-8;
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.15) 0%, rgba(26, 26, 26, 0.8) 50%, rgba(139, 0, 0, 0.15) 100%);
+    border: 2px solid var(--color-gold);
+    box-shadow: 0 0 30px rgba(212, 168, 85, 0.2);
+  }
+
+  .finale-image {
+    @apply w-full max-w-xs mx-auto my-6 block;
+    border: 3px solid var(--color-gold);
+    box-shadow: 0 0 20px rgba(212, 168, 85, 0.3);
   }
 
   /* Celebration page */

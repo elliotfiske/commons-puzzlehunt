@@ -2,6 +2,7 @@ module Frontend exposing (FrontendApp, Model, UnwrappedFrontendApp, app, app_)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation
+import CssVersion
 import Duration exposing (Duration)
 import Effect.Browser
 import Effect.Browser.Navigation
@@ -269,7 +270,7 @@ view : Model -> Effect.Browser.Document FrontendMsg
 view model =
     { title = "The Secret of the Commons"
     , body =
-        [ node "link" [ rel "stylesheet", href "/output.css" ] []
+        [ node "link" [ rel "stylesheet", href ("/output.css?v=" ++ CssVersion.version) ] []
         , viewBody model
         ]
     }

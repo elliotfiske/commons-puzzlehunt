@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Lamdera habit tracking dashboard with TailwindCSS",
   "scripts": {
-    "build:css": "npx tailwindcss -i ./src/input.css -o ./public/output.css",
-    "watch:css": "npx tailwindcss -i ./src/input.css -o ./public/output.css --watch"
+    "build:css": "bash scripts/generate-css-version.sh && npx tailwindcss -i ./src/input.css -o ./public/output.css",
+    "watch:css": "bash scripts/generate-css-version.sh && npx tailwindcss -i ./src/input.css -o ./public/output.css --watch"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
