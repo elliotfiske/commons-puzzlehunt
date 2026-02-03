@@ -26,21 +26,20 @@ view : UserProgress -> Html FrontendMsg
 view progress =
     div [ class "page-wrapper" ]
         [ div [ class "page-content" ]
-            ([ if allPuzzlesComplete progress then
+            [ if allPuzzlesComplete progress then
                 finaleSection
 
-               else
+              else
                 text ""
-             , h1 [ class "heading-deco" ] [ text "Puzzle Hub" ]
-             , p [ class "body-text-muted" ] [ text "Find all three characters to unlock the safe." ]
-             , div [ class "divider-simple" ] []
-             , div [ class "mt-8" ]
-                [ puzzleCard "paintings-link" "The Paintings" "/paintings" progress.puzzle1Complete (PuzzleData.revealedNumber Puzzle1)
+            , h1 [ class "heading-deco" ] [ text "Puzzle Hub" ]
+            , p [ class "body-text-muted" ] [ text "Find all three characters to unlock the safe." ]
+            , div [ class "divider-simple" ] []
+            , div [ class "mt-8" ]
+                [ puzzleCard "paintings-link" "The Proof is in the Pigment" "/paintings" progress.puzzle1Complete (PuzzleData.revealedNumber Puzzle1)
                 , puzzleCard "ledger-link" "Bootlegger's Ledger" "/ledger" progress.puzzle2Complete (PuzzleData.revealedNumber Puzzle2)
                 , puzzleCard "stash-link" "Smuggler's Stash" "/stash" progress.puzzle3Complete (PuzzleData.revealedNumber Puzzle3)
                 ]
-             ]
-            )
+            ]
         , div [ class "page-footer" ]
             [ a [ class "page-footer-link", href "/help", onClick (NavigateTo "/help") ] [ text "Need help?" ]
             ]
@@ -66,5 +65,3 @@ puzzleCard linkId title path isComplete revealedNumber =
                 text ""
             ]
         ]
-
-
